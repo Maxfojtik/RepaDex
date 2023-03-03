@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+		<link href="style.css" rel="stylesheet">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+		<script src="iPads.js"></script>
+		<title>RepaDex</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Work+Sans:wght@600&display=swap" rel="stylesheet">
+		<script src="JsBarcode.all.min.js"></script>
+	</head>
+	<body style="background-color: black;">
+        <div id="mainProgram">
+            <h1 id="mainError" style="display:none;"></h1>
+            <div id="disconnectedMessage" style="display:none;" class="center-screen">
+                <div class="row">
+                    <img src="cloud-slash.svg" width="100" height="100"></img>
+                </div>
+            </div>
+            <h3 class="informationTab" style="right: 40px; top: 25px;" id="iPadInfo">iPad information</h3>
+            <h3 class="informationTab" style="right: 40px; top: 55px;" id="pencilInfo">pencil information</h3>
+            <div style="display:flex; align-items: center;" id="savingDisplay" class="float-right-top">
+                <strong style="padding-right: 10px; color:white;" id="saveText"></strong>
+                <!--<div id="saveSpinner" class="spinner-border ms-auto" role="status" aria-hidden="true"></div>-->
+                <div class="pokeImage shaker" id="pokeImage">
+                    <img src="pokeBall.svg"></img>
+                    <div id="pokeStars" class="pokeStars"style="display:none;">
+                        <img src="star.png" class="starImage star-1"></img>
+                        <img src="star.png" class="starImage star-2"></img>
+                        <img src="star.png" class="starImage star-3"></img>
+                    </div>
+                </div>
+            </div>
+            <h1 class="repaLogo" id="mainTitle" style="padding-left: 50px;"><span id="RepaPartTop" class="RepaPartBefore" style="padding-left: 50px;">Repa</span><span id="RepaPart" class="RepaPart">Repa</span><span style="color: white">Dex</span></h1>
+            <div class="iPadRow">
+                <h3>Finished</h3>
+                <div id="finishedPanel"></div>
+            </div>
+            <div class="iPadRow">
+                <h3>Waiting on DEP</h3>
+                <div id="DEPPanel"></div>
+            </div>
+            <div class="iPadRow">
+                <h3>Submitted</h3>
+                <div id="submittedPanel"></div>
+            </div>
+            <div class="iPadRow">
+                <h3>Created Repair Form</h3>
+                <div id="createdPanel"></div>
+            </div>
+        </div>
+        <div class="fullscreenPanel" id="byePanel">
+            Bye! Have a good night - Max
+        </div>
+        <div class="fullscreenPanel" id="whitePanel" style="background-color: white;">
+
+        </div>
+    </body>
+</html>

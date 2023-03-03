@@ -1,0 +1,138 @@
+work to be done:
+	done - show iPad serial number in:
+		repair edit - done
+		repair edit edit - done
+		copiable - done
+		
+	done - make the front end work
+		search - done, dont know how it will work with lots of repairs
+			get discriptors for each repair generally - done, (could include iPad SN - done, or maybe loaner information)
+		pagementation? - just big boi scrollbar until we have problems with lag, or I have time
+		scroll - done
+		only show last 100 repairs, have to search to get the rest - done
+		
+	color code front end (change color when adding work) - done
+	make status line work - done
+	
+	work on style with different widths
+		whole repairEdit, repairForm almost complete - done
+		
+		
+	logs
+		created repair - done
+		added work - done
+		deleted work - done
+		edited work - done
+		edited repair - done
+		picked up 
+		
+	being able to update itself - temp problem fixed
+	
+	needs to be able to reprint form - done
+	
+	bugs:
+	
+		not showing top repair - done
+		barcode not working - done
+		change highlighting - done
+		journal for editing repair adding wrong info - done
+		multiple problems/other not working - done
+		subtype not closing when bsacktomain
+		
+		
+	---------------- minimum viable product ---------------
+	
+	make email the place where we do the searching - done
+	
+	change row to be darker	- done
+	
+	select worker selector immedetly - done
+		
+	repair notes - done
+		
+	make it a requirement to select yourself before saving repair changes - done
+		
+	make colors for front end configurable
+		
+	logs for loaner 
+	
+	part checkin
+	
+	reconize serial numbers in intake form
+	
+	loaner form
+		jk it is now a modal... 
+			need to add a selector for condition, loaded from when last checked in
+			text box for estimated value, also loaded from database
+				when it does not reconize the computer:
+					Make and Model
+					Serial Number
+					
+	make it not die when disconnected from K drive
+	loaner checkin
+	attention items (for example if a repair is open for more than 2 months unfinished, or 2 month after finishing)
+	better error messages when config or backend dies, or if the k drive is down
+	does every loaner connect to a repair... If so, why do we have so many loaners out?
+	
+		
+	easter eggs:
+		when clicking on "Repa" it changes a random nice color and then goes back to what it was
+		when writing a @umich.edu email it says "muck fishican"
+	
+
+	late game:
+		add colors for logged in
+
+	
+	when adding a new work thing:
+		add 2 css variables
+		add 2 css classes
+		add config color
+		add load config into css in index.js
+	
+	
+	
+cons:
+	every new employee has to be added (using brennans configurator)
+	every new repair product we decide to support needs to be added
+	potential for new bugs
+	changes to our current system
+	loaners not complete
+	will have to be updated often
+
+expected and here:
+	multiple people can use it at once
+	can store and retreieve repairs
+	can print forms for people to sign
+
+pros:
+	conneciton to OSU find people to validate emails and students
+	iPad serial number requirement
+	applecare+ fee and find my notifications
+	configurable 
+	commited to documentation (not much yet)
+	repair journal (can see everything that happens)
+	work is done with events and not in one big text box
+	runs on the same infrustucure that access does
+	has highlighting on first signiture line
+	looks prettier
+	pokemon
+	front colorful and has status labels
+	
+	
+big pros:
+	can handle 100,000 repairs easily, wont slow down
+	does not freeze (has indications when doing work)
+	
+	
+
+flow diagram:
+	Main <-> Repair Form
+	  /\
+	  |
+	  \/
+	Repair Edit <-> Loaner Form
+	  /\
+	  |
+	  \/
+	Loaner Edit

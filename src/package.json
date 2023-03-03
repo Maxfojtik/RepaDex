@@ -1,0 +1,25 @@
+{
+  "name": "repadex",
+  "version": "1.0.0",
+  "description": "Tech Hub repair dex",
+  "main": "entry.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maxfojtik/RapaDex.git"
+  },
+  "author": "Max Fojtik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Maxfojtik/RapaDex/issues"
+  },
+  "homepage": "https://github.com/Maxfojtik/RapaDex#readme",
+  "devDependencies": {
+    "electron": "^23.1.1"
+  },
+  "dependencies": {
+    "update-electron-app": "^2.0.1"
+  }
+}

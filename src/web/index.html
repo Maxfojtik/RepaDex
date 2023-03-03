@@ -1,0 +1,1436 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+		crossorigin="anonymous"></script>
+	<link href="style.css" rel="stylesheet">
+	<script src="index.js"></script>
+	<script src="front.js"></script>
+	<script src="repairForm.js"></script>
+	<script src="repairEdit.js"></script>
+	<script src="loanerForm.js"></script>
+	<script src="settingsEdit.js"></script>
+	<title>RepaDex</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@900&family=Work+Sans:wght@600&display=swap"
+		rel="stylesheet">
+	<script src="JsBarcode.all.min.js"></script>
+</head>
+
+<body>
+	<nav class="navbar fixed-top bg-body-tertiary">
+		<div class="desktop-app-title-bar">
+			<div class="window-controls">
+				<button aria-label="minimize" title="Minimize" tabindex="-1" class="window-control minimize"><svg
+						aria-hidden="true" version="1.1" width="10" height="10">
+						<path d="M 0,5 10,5 10,6 0,6 Z"></path>
+					</svg></button>
+				<button aria-label="maximize" title="Maximize" tabindex="-1" class="window-control maximize"><svg
+						aria-hidden="true" version="1.1" width="10" height="10">
+						<path d="M 0,0 0,10 10,10 10,0 Z M 1,1 9,1 9,9 1,9 Z"></path>
+					</svg></button>
+				<button aria-label="restore" title="Restore" tabindex="-1" class="window-control restore"
+					style="display: none;"><svg aria-hidden="true" version="1.1" width="10" height="10">
+						<path
+							d="m 2,1e-5 0,2 -2,0 0,8 8,0 0,-2 2,0 0,-8 z m 1,1 6,0 0,6 -1,0 0,-5 -5,0 z m -2,2 6,0 0,6 -6,0 z">
+						</path>
+					</svg></button>
+				<button aria-label="close" title="Close" tabindex="-1" class="window-control close"><svg
+						aria-hidden="true" version="1.1" width="10" height="10">
+						<path
+							d="M 0,0 0,0.7 4.3,5 0,9.3 0,10 0.7,10 5,5.7 9.3,10 10,10 10,9.3 5.7,5 10,0.7 10,0 9.3,0 5,4.3 0.7,0 Z">
+						</path>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</nav>
+	<div id="appWrapper">
+		<h1 id="mainError" style="display:none;"></h1>
+		<div id="repairFormWarning" style="display:none; width: 1500;" class="center-screen">
+			<div class="row" id="appleCareWarning">
+				<div class="col-1" style="padding-left: 150px; margin-right:50px;">
+					<h1><input class="form-check-input" type="checkbox" value="" id="ACAck" onchange="warningAck()">
+					</h1>
+				</div>
+				<div class="col">
+					<h1>You selected AppleCare+; this means there is a potential fee associated.</h1>
+				</div>
+				<div class="col-1" style="width: 220px;">
+					<!-- I know I should have used padding on the above element but I didnt think about it until after and now it is layed out correctly and I dont want to touch it-->
+				</div>
+			</div>
+			<div class="row" id="findWarning">
+				<div class="col-1" style="padding-left: 150px; margin-right:50px;">
+					<h1><input class="form-check-input" type="checkbox" value="" id="FMAck" onchange="warningAck()">
+					</h1>
+				</div>
+				<div class="col">
+					<h1>This is an Apple device and has the option for Find My; you have to make sure Find My is
+						disabled!
+					</h1>
+				</div>
+				<div class="col-1" style="width: 220px;">
+					<!-- I know I should have used padding on the above element but I didnt think about it until after and now it is layed out correctly and I dont want to touch it-->
+				</div>
+			</div>
+		</div>
+		<div id="connectingMessage" style="display:block;" class="center-screen">
+			<div class="row">
+				<img id="reception-1" class="reception" src="reception-0.svg" width="100" height="100"
+					style="display:block;"></img>
+				<img id="reception-2" class="reception" src="reception-1.svg" width="100" height="100"
+					style="display:none;"></img>
+				<img id="reception-3" class="reception" src="reception-2.svg" width="100" height="100"
+					style="display:none;"></img>
+				<img id="reception-4" class="reception" src="reception-3.svg" width="100" height="100"
+					style="display:none;"></img>
+				<img id="reception-5" class="reception" src="reception-4.svg" width="100" height="100"
+					style="display:none;"></img>
+			</div>
+			<h1>Connecting to K drive...</h1>
+		</div>
+		<div id="disconnectedMessage" style="display:none;" class="center-screen">
+			<div class="row">
+				<img src="cloud-slash.svg" width="100" height="100"></img>
+				<h1>Can't connect to K drive</h1>
+			</div>
+		</div>
+		<div id="updatingMessage" style="display:none;" class="center-screen">
+			<div class="row" style="display:initial">
+				<img class="rotate" src="nut-fill.svg" width="100" height="100"></img>
+				<div class="progress updatingProgress">
+					<div id="updateProgressInside" class="progress-bar" role="progressbar" aria-valuenow="25"
+						aria-valuemin="0" aria-valuemax="100"></div>
+				</div>
+			</div>
+		</div>
+		<div id="container" class="container" style="display:none;">
+			<div style="display:flex; align-items: center;" id="savingDisplay" class="float-right-top"
+				onclick="tryOverride()">
+				<strong style="padding-right: 5px;" id="saveText"></strong>
+				<strong style="padding-right: 10px;" id="waitReason"></strong>
+				<!--<div id="saveSpinner" class="spinner-border ms-auto" role="status" aria-hidden="true"></div>-->
+				<div class="pokeImage shaker" id="pokeImage">
+					<img src="pokeBall.svg"></img>
+					<div id="pokeStars" class="pokeStars" style="display:none;">
+						<img src="star.png" class="starImage star-1"></img>
+						<img src="star.png" class="starImage star-2"></img>
+						<img src="star.png" class="starImage star-3"></img>
+					</div>
+				</div>
+			</div>
+			<div id="topBar" class="row">
+				<!--<img style="float:left; margin-left:-25px" src="Logo.png" ></img>-->
+				<div class="col">
+					<span style="display: flex; position:relative">
+						<h1 class="repaLogo" id="mainTitle" onclick="showAbout()"><span id="RepaPartTop"
+								class="RepaPartBefore">Repa</span><span id="RepaPart" class="RepaPart">Repa</span><span
+								id="dex" style="color: #000000">Dex</span></h1>
+						<h5 style="margin-top: 94px; margin-left: 425px; padding-left: 10px; height: 20px; position:absolute; float:left"
+							class="text-muted" id="versionLabel" onmouseover="versionHover()"
+							onmouseout="versionUnhover()" onclick="versionClick()"></h5>
+					</span>
+				</div>
+				<div class="col">
+					<img id="techLogo" class="showWhenPrint" src="TechLogo.png"
+						style="display:none; height:120px; float: right; margin-top: 35px; margin-bottom: -10px"></img>
+				</div>
+			</div>
+
+
+
+
+			<div id="mainTable" style="display:block;" class="panel">
+				<div class="row">
+					<div class="col-4">
+						<div id="searchInputGroup" class="input-group mb-3">
+							<input type="text" class="form-control form-control" id="searchInput" placeholder="Search"
+								oninput="" style="height: 38px; border-color: black;" spellcheck="false">
+							<button id="searchButton" style="height: 38px; flex: initial;" type="button"
+								class="btn btn-primary" onclick="search()" disabled>Search</button>
+							<!--<select id="searchOptions" class="form-select" aria-label="Search Option" style="height: 38px; flex: initial; width: 150px;">
+								<option value="All">All</option>
+								<option value="Repairs" selected>Repairs</option>
+								<option value="Loaners">Loaners</option>
+							</select>-->
+						</div>
+					</div>
+					<div class="col" id="">
+						<p id="tooManyResultsWarning" style="display:none; margin-top: -5px"></p>
+						<p id="similarResultsWarning" style="display:none; color: #cc0000; margin-top: -5px">What you
+							searched for does not exist, here are some similar serial numbers</p>
+					</div>
+					<div class="col">
+						<div style="float: right;">
+							<button id="filterButton" style="height: 38px; flex: initial; margin-right: 5px;"
+								type="button" class="btn btn-primary" onclick="openFilter()" disabled><img
+									src="filter.svg"></img></button>
+							<button id="refreshButton" style="height: 38px; flex: initial; margin-right: 5px;"
+								type="button" class="btn btn-primary" onclick="loadAll()" disabled><img
+									src="arrow-clockwise.svg"></img></button>
+							<button style="width: 250px; height: 38px;" id="startNewRepairButton" type="button"
+								class="btn btn-primary btn-style510" onclick="createNewRepair()" disabled>Create a new
+								repair</button>
+						</div>
+					</div>
+				</div>
+				<div class="table-container">
+					<table class="table table-hover" id="dt">
+						<thead>
+							<tr style="border-top-width: 0px;">
+								<th scope="col">Name</th>
+								<th scope="col">Reference #</th>
+								<th scope="col">Device Name</th>
+								<th scope="col">Serial Number</th>
+								<th scope="col">Started</th>
+								<th scope="col">Status</th>
+							</tr>
+						</thead>
+						<tbody id="dtBody">
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+
+
+			<div id="repairEdit" style="display:none;" class="panel">
+				<ul class="nav nav-tabs" id="repairNav">
+					<li class="nav-item" id="repairBackButtonItem">
+						<button id="repairEditBackButton" type="button" class="btn btn-secondary" onclick="backToMain()"
+							style="margin-bottom: 5px; padding-top: 1px; padding-bottom: 1px; margin-right: 5px;">
+							←</button>
+					</li>
+					<!--more generated in js showRelatedRepairs-->
+				</ul>
+				<div class="custom-info-table" style="position: relative;">
+					<div class="repairContextButtons" id="repairContextButtons">
+						<div id="editRepairPencil" class="repair-context-button" onclick="editRepairPencil()"
+							data-bs-toggle="modal" data-bs-target="#editRepairModal">
+							<img class="repairEditPencilImage" src='pencil.svg' style='width: 20px; height: 20px'></img>
+						</div>
+						<div id="showLogsJournal" class="repair-context-button" onclick="showLogs()"
+							data-bs-toggle="modal" data-bs-target="#logsModel">
+							<img class="repairLogImage" src='journal.svg' style='width: 20px; height: 20px'></img>
+						</div>
+						<div id="reprintForm" class="repair-context-button" onclick="reprintForm()">
+							<img class="repairReprintImage" src='printer.svg' style='width: 20px; height: 20px'></img>
+						</div>
+					</div>
+					<div class="row" style="padding-top: 5px;">
+						<div class="col">
+							<h5 class="d-inline-flex header-inline copiable" id="nameLabel" data-text=""></h5>
+							<h5 class="d-inline-flex header-inline text-muted copiable" id="emailLabel" data-text="">
+							</h5>
+							<h5 class="d-inline-flex header-inline text-muted copiable" id="phoneLabel" data-text="">
+							</h5>
+						</div>
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Employee</h5>
+						</div>
+						<div class="col-4" id="employeeLabel">
+
+						</div>
+
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted copiable" data-text="" id="refLabelLabel">
+								Reference Number</h5>
+						</div>
+						<div class="col-4">
+							<h5 class="d-inline-flex header-inline copiable" data-text="" id="refLabel"></h5>
+						</div>
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Serial Number</h5>
+						</div>
+						<div class="col-4">
+							<h5 class="d-inline-flex header-inline copiable" data-text="" id="SNLabel"></h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Start Date</h5>
+						</div>
+						<div class="col">
+							<h5 class="d-inline-flex header-inline" id="startDateLabel"></h5>
+						</div>
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Model</h5>
+						</div>
+						<div class="col-4">
+							<h5 class="d-inline-flex header-inline" id="modelLabel"></h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Accessories</h5>
+						</div>
+						<div class="col">
+							<h5 class="d-inline-flex header-inline" id="accLabel"></h5>
+						</div>
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Warranty</h5>
+						</div>
+						<div class="col-4">
+							<h5 class="d-inline-flex header-inline" id="warrLabel"></h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Purchase Date</h5>
+						</div>
+						<div class="col">
+							<h5 class="d-inline-flex header-inline" id="purchLabel"></h5>
+						</div>
+						<div class="col-2" id="datePickedUpLabel">
+							<h5 class="d-inline-flex header-inline text-muted" id="pickedUpText"></h5>
+						</div>
+						<div class="col-4" id="datePickedUpContext" style="display:none;">
+
+						</div>
+						<div class="col-4" id="datePickedUpButton">
+							<button id="pickUpButton" type="button" class="btn btn-danger repairEditButton"
+								data-bs-toggle="modal" data-bs-target="#pickupModal" onclick="fillPickedUpDate()">Pick
+								Up</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Loaner Computer</h5>
+						</div>
+						<div class="col-4">
+							<h5 id="repairLoanerLabel" class="loanerLabel"></h5>
+							<button id="checkInLoanerButton" style="display:none;" type="button"
+								class="btn btn-success repairEditButton loanerEditButton" onclick="checkInLoaner()"
+								disabled>
+								Check In</button>
+							<button id="issueLoanerButton" type="button" onclick="clearLoaner();"
+								class="btn btn-danger repairEditButton" data-bs-toggle="modal"
+								data-bs-target="#loanerModal" disabled>Issue Loaner</button>
+						</div>
+						<div class="col-2 iPadSerialNumberLabels" style="display:none;">
+							<h5 class="d-inline-flex header-inline text-muted">iPad Serial Number</h5>
+						</div>
+						<div class="col-4 iPadSerialNumberLabels" style="display:none;">
+							<h5 class="d-inline-flex header-inline copiable" id="iPadSNLabel" data-text=""></h5>
+						</div>
+					</div>
+					<div class="row" id="addressRepairRow">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted copiable" id="addressLabel">Address</h5>
+						</div>
+						<div class="col">
+							<h5 class="d-inline-flex header-inline copiable" id="address1Label" data-text=""></h5>
+							<h5 class="d-inline-flex header-inline copiable" id="address2Label" data-text=""></h5>
+							<h5 class="d-inline-flex header-inline copiable" id="cityLabel" data-text=""></h5>
+							<h5 class="d-inline-flex header-inline copiable" id="stateLabel" data-text=""></h5>
+							<h5 class="d-inline-flex header-inline copiable" id="zipLabel" data-text=""></h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Intake Notes</h5>
+						</div>
+						<div class="col">
+							<h5 class="d-inline-flex header-inline" id="intakeNotesLabel"></h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Stated Problem</h5>
+						</div>
+						<div class="col">
+							<h5 class="d-inline-flex header-inline" id="statedProblemLabel"></h5>
+						</div>
+					</div>
+				</div>
+				<!--<div class="row" style="padding-top: 0px;">
+					<div class="col">
+						<h1 class="d-inline-flex header-inline">Work completed</h1>
+					</div>
+				</div>-->
+				<table class="table table-striped work-table" style="margin-top:40px;">
+					<tbody id="workTableBody">
+						<!--<tr>
+					  <td scope="row">9/20/2021 2:50pm</td>
+					  <td>Created Repair Form</td>
+					  <td></td>
+					  <td><span class="badge rounded-pill badge-todd">Todd</span></td>
+					</tr>-->
+
+					</tbody>
+				</table>
+				<button type="button" class="btn btn-secondary workButton" id="addWorkButton"
+					onclick="addWorkLogin()">Log
+					in as a Repair Technician</button>
+			</div>
+
+
+
+
+			<div id="repairForm" style="display:none" class="panel">
+				<div class="row">
+					<div class="col-1 hideWhenPrint" id="inputBackButton" style="width: 50px;">
+						<button id="repairFormBack" type="button" class="btn btn-secondary" onclick="backToMain()"
+							tabindex="-1">
+							←</button>
+					</div>
+					<div class="col-auto" style="padding-right:5px;">
+						<h4><span id="printingPill" class="badge rounded-pill badge-spaced text-dark showWhenPrint"
+								style="border-color: black; display:none;">Example</span></h4>
+					</div>
+					<div class="col-6" style="padding-left:0px;">
+						<h3 id="RefNumLabel" class="label-light">Ref. Number: ???</h3>
+					</div>
+					<div id="barcodediv" class="col showWhenPrint" style="display:none;">
+						<svg id="repairBarcode" style="float:right;"></svg>
+					</div>
+				</div>
+				<div id="workerSelector" class="workerSelect hideWhenPrint" tabindex="1"
+					onfocus="startCollectKeyboard()" onblur="stopCollectKeyboard()">
+					<!--HTML generated within Javascript from configuration.json-->
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1" id="basic-addon3">Customer Name</span>
+						<input id="nameForm" type="text" class="form-control is-invalid validable"
+							placeholder="Brutus Buckeye" aria-label="Brutus Buckeye" aria-describedby="basic-addon3"
+							oninput="validateSaveButtons()" tabindex="2">
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2" id="basic-addon14">Date Started</span>
+						<input class="hideWhenPrint dateTimeForm" id="dateForm" type="datetime-local" value=""
+							tabindex="-1">
+						<input class="showWhenPrint form-control" id="dateFormPrint" type="text" placeholder=""
+							aria-label="" aria-describedby="basic-addon14" style="display:none;">
+					</div>
+					<!--<div class="col-2" style="padding-top:6px; padding-left:15px; padding-right:15px; width: 220px;">
+
+					</div>-->
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text" id="basic-addon5">Email</span>
+						<input id="emailForm" type="text" class="form-control is-invalid"
+							placeholder="buckeye.1@osu.edu (searchable)" aria-label="buckeye.1@osu.edu"
+							aria-describedby="basic-addon5" oninput="validateSaveButtons()" onblur="findPerson()"
+							tabindex="3">
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2" id="basic-addon2">Serial Number</span>
+						<input id="serialForm" type="text" class="form-control is-invalid validable" placeholder=""
+							aria-label="" aria-describedby="basic-addon2" oninput="validateSaveButtons();"
+							onblur="checkSerialClosed();" tabindex="9">
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1" id="basic-addon6">Phone Number</span>
+						<input id="phoneForm" type="text" class="form-control is-invalid phoneValidable"
+							placeholder="(614) 292-8883" aria-label="614-292-8883" aria-describedby="basic-addon6"
+							oninput="validateSaveButtons();" tabindex="4">
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2" id="basic-addon4">Make</span>
+						<div id="makeSelector" class="btn-group hideWhenPrint" role="group" aria-label="Make Select">
+							<!--Generated in js-->
+						</div>
+						<input id='makeOtherBox' type="text" class="form-control validable is-invalid hideWhenPrint"
+							placeholder="Specify" aria-label="Specify" style="display:none;"
+							oninput="validateSaveButtons()">
+						<input id='printMake' type="text" class="form-control showWhenPrint" style="display:none;">
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1" id="basic-addon13">Warranty</span>
+						<!--<input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon13">-->
+						<select style="border-top-right-radius: .25rem;  border-bottom-right-radius: .25rem;"
+							id="warrantySelector"
+							class="form-select header-inline warrantySelector is-invalid hideWhenPrint"
+							aria-label="Select warranty" onclick="warrantySelected(); validateSaveButtons();"
+							onmousedown="removeFirstWarranty();" tabindex="5">
+							<!--generated in js-->
+						</select>
+						<input id="warrantyOtherText" type="text"
+							class="form-control validable is-invalid showWhenPrint" placeholder="Specify" aria-label=""
+							style="display:none;" oninput="validateSaveButtons()">
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2 modelSpan" id="basic-addon7">Model</span>
+						<div id="typeSelectors" class="btn-group hideWhenPrint" role="group" aria-label="Model Select">
+
+							<!--Generated in js-->
+						</div>
+						<input id='typeOtherBox' type="text" class="form-control validable is-invalid hideWhenPrint"
+							placeholder="Specify" aria-label="Specify" style="display:block;"
+							oninput="validateSaveButtons()">
+						<input id='printModel' type="text" class="form-control showWhenPrint" style="display:none;">
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1" id="basic-addon8">Purchase Date</span>
+						<input id="purchForm" type="text" class="form-control" placeholder="" aria-label=""
+							aria-describedby="basic-addon8" tabindex="6">
+					</div>
+					<div class="input-group mb-3 col" id="passwordDiv">
+						<span class="input-group-text const-width-2" id="basic-addon7">Password</span>
+						<input id="passwordForm" type="input" class="form-control" placeholder=""
+							aria-label="01-01-1870" aria-describedby="basic-addon7" disabled
+							value="Written in after printing">
+						<!--<input id="passwordForm" type="password" class="form-control" placeholder="" aria-label="01-01-1870" aria-describedby="basic-addon7">
+						<button class="btn btn-primary" onmousedown="$(passwordForm).attr('type', 'input')" onmouseup="$(passwordForm).attr('type', 'password')">Show</button>-->
+					</div>
+					<div class="input-group mb-3 col" id="iPadSNDiv" style="display:none;">
+						<span class="input-group-text" id="basic-addon15">iPad Serial Number</span>
+						<input id="iPadSN" type="text" class="form-control validable is-invalid" placeholder=""
+							aria-label="01-01-1870" aria-describedby="basic-addon15" oninput="validateSaveButtons()">
+					</div>
+				</div>
+				<div class="row" style="height: 54px">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1" id="basic-addon8">Accessories</span>
+						<input id="accForm" type="text" class="form-control" placeholder="" aria-label=""
+							aria-describedby="basic-addon8" tabindex="7">
+					</div>
+					<div class="form-check form-switch col-3 hideWhenPrint" style="padding-left: 12px">
+						<h4>
+							<input class="form-check-input" style="margin-left: 0px;" type="checkbox"
+								id="flexSwitchCheckCheckedDepartmental" oninput="departmentalSwitched();" tabindex="12">
+							<label class="form-check-label" style="margin-top: 3px; padding-left: 10px;"
+								for="flexSwitchCheckCheckedDepartmental">Departmental</label>
+						</h4>
+					</div>
+					<div class="form-check form-switch col-3 hideWhenPrint" style="padding-left: 12px">
+						<h4 id="digitalFlagshipSwitch" style="display:none;">
+							<input class="form-check-input" style="margin-left: 0px;" type="checkbox"
+								id="flexSwitchCheckCheckedFlagship" tabindex="13">
+							<label class="form-check-label" style="margin-top: 3px; padding-left: 10px;"
+								for="flexSwitchCheckCheckedFlagship">Digital Flagship</label>
+						</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class="mb-3 col" style="display: flex">
+						<div class="input-group">
+							<span class="input-group-text const-width-1" id="basic-addon9">Intake Notes</span>
+							<!--<input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon9">-->
+							<textarea style="white-space: pre-wrap;" class="form-control" id="intakeTextArea" rows="1"
+								oninput="" tabindex="8"></textarea>
+						</div>
+						<button id="addAddressButton" class="btn btn-primary hideWhenPrint"
+							style="margin-left: 10px; width: 175px" data-bs-toggle="modal"
+							data-bs-target="#addAddressModal">Add an address</button>
+					</div>
+				</div>
+				<div class="row hideWhenPrint" id="problemSelectorRow">
+					<div class="input-group mb-3 col">
+						<select class="form-select header-inline is-invalid" aria-label="Select Problem"
+							id="problemSelector" onmousedown="removeFirstProblem()" style="display:none;"
+							onclick="validateSaveButtons();">
+							<!--Generated in js from configuration.json-->
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col showWhenPrint" style="display:none;" id="problemBox">
+						<span class="input-group-text const-width-1" id="basic-addon10">Problem</span>
+						<textarea class="form-control" id="problemTextArea" rows="1"
+							oninput="validateSaveButtons()"></textarea>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="display:none;">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1">Repair Notes</span>
+						<textarea class="form-control" id="repairNotesArea" rows="3" oninput=""></textarea>
+					</div>
+				</div>
+				<div class="row hideWhenPrint" id="saveButtons">
+					<div class="col">
+						<button id="saveAndPrintRepairForm" type="button" class="btn btn-primary saveButton"
+							onclick="saveAndPrintRepairForm()" style="width: 100%" disabled tabindex="15">Save and
+							Print</button>
+					</div>
+					<div class="col">
+						<button id="saveRepairForm" type="button" class="btn btn-primary saveButton"
+							onclick="saveRepairForm()" style="width: 100%" disabled tabindex="16">Save</button>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="display:none; margin-bottom: -15px;">
+					<p id="dropOffStatement" class="statement"></p>
+				</div>
+				<div class="row showWhenPrint" style="display:none;">
+					<div class="col">
+						<h5 class="dropOffSig" id="dropOffSigLine" style="background-color: #ffd36e"><span
+								style="padding-top:10px;">Customer Drop-Off Signature:</span><span id="dateTimeLabel"
+								class="dateDropOffSig">xx/xx/xxxx xx:xx pm</span></h5>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="display:none; margin-bottom: -15px; margin-top: 20px;">
+					<p id="pickUpStatement" class="statement"></p>
+				</div>
+				<div class="row showWhenPrint" style="display:none;">
+					<div class="col">
+						<h5 class="dropOffSig"><span style="padding-right: 19px; padding-top:10px;">Customer Pick-Up
+								Signature:</span><span class="dateDropOffSig"
+								style="padding-left: 90px; margin-top: -13;">___/___/_______</span></h5>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="display:none;">
+					<div class="col">
+						<p style="padding-left: 210px" id="nameLabelBottom">Customer Name</p>
+					</div>
+				</div>
+			</div>
+
+
+
+
+			<div id="loanerForm" style="display:none;" class="panel">
+				<div class="row">
+					<div class="col-auto" style="padding-right:5px;">
+						<h4><span id="printingPillLoaner"
+								class="badge rounded-pill badge-spaced text-dark showWhenPrint"
+								style="border-color: black; display:none;">Example</span></h4>
+					</div>
+					<div class="col-6 showWhenPrint" style="padding-left:0px; display:none;">
+						<h3 id="LoanerRefNumLabel">Ref. Number: ???</h3>
+					</div>
+					<div id="barcodediv" class="col showWhenPrint" style="display:none;">
+						<svg id="loanerBarcode" style="float:right;"></svg>
+					</div>
+				</div>
+				<h4>
+					<div id="loanerWorkerSelector" class="hideWhenPrint" tabindex="1" style="margin-top:-17px;">
+						<!--HTML generated within Javascript from configuration.json-->
+					</div>
+				</h4>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1">Ref Number</span>
+						<input id="loanerRefNum" type="text" class="form-control enableWhenPrint" disabled>
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2">Date Started</span>
+						<input class="hideWhenPrint dateTimeForm" id="loanerDateForm" type="datetime-local" value="">
+						<input class="showWhenPrint form-control" id="loanerDateFormPrint" type="text" placeholder=""
+							style="display:none;">
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1">Customer Name</span>
+						<input id="loanerNameForm" type="text" class="form-control enableWhenPrint"
+							placeholder="Brutus Buckeye" disabled>
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2">Make/Model</span>
+						<input id="loanerMakeModel" type="text" class="form-control enableWhenPrint" placeholder=""
+							disabled>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text">Email</span>
+						<input id="loanerEmailForm" type="text" class="form-control enableWhenPrint"
+							placeholder="buckeye.1@osu.edu" disabled>
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2">Serial Number</span>
+						<input id="loanerSerialForm" type="text" class="form-control enableWhenPrint" placeholder=""
+							disabled>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1" id="basic-addon6">Phone Number</span>
+						<input id="loanerPhoneForm" type="text" class="form-control enableWhenPrint"
+							placeholder="(614) 292-8883" aria-label="614-292-8883" aria-describedby="basic-addon6"
+							disabled>
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2">Asset Tag</span>
+						<input id="loanerTagForm" type="text" class="form-control enableWhenPrint" placeholder=""
+							disabled>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-1">Accessories</span>
+						<input id="loanerAccForm" type="text" class="form-control enableWhenPrint" disabled>
+					</div>
+					<div class="input-group mb-3 col">
+						<span class="input-group-text const-width-2">Device Value</span>
+						<input id="loanerDeviceValue" type="text" class="form-control" placeholder=""
+							oninput="loanerValueInput('loanerDeviceValue')">
+					</div>
+				</div>
+				<div class="row">
+					<div class="mb-3 col" style="display: flex">
+						<div class="input-group">
+							<span class="input-group-text">Condition Released</span>
+							<textarea style="white-space: pre-wrap;" class="form-control" id="loanerConditionTextArea"
+								oninput="validateLoanerSaveButtons()" rows="1" tabindex="8"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="display:none">
+					<div class="mb-3 col" style="display: flex">
+						<div class="input-group">
+							<span class="input-group-text">Condition Received</span>
+							<textarea style="white-space: pre-wrap;" class="form-control" rows="1"
+								tabindex="8"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="loanerCheckboxes">
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="loanerCheckBox1" value="option1"
+							onchange="validateLoanerSaveButtons()">
+						<label class="form-check-label" for="loanerCheckBox1">Laptop Computer</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="loanerCheckBox2" value="option2"
+							onchange="validateLoanerSaveButtons()">
+						<label class="form-check-label" for="loanerCheckBox2">Laptop Charger</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="checkbox" id="loanerCheckBox3" value="option3"
+							onchange="validateLoanerSaveButtons()">
+						<label class="form-check-label" for="loanerCheckBox3">Carrier Bag</label>
+					</div>
+				</div>
+				<div class="row hideWhenPrint" id="saveButtons">
+					<div class="col">
+						<button id="repairFormBack" type="button" class="btn btn-secondary loanerButton"
+							onclick="backToRepair()" tabindex="-1">Cancel</button>
+					</div>
+					<div class="col">
+						<button id="saveAndPrintLoanerForm" type="button"
+							class="btn btn-primary loanerButton loanerButtonEnableable"
+							onclick="saveAndPrintLoanerForm()" disabled tabindex="15">Save and
+							Print</button>
+					</div>
+					<div class="col">
+						<button id="saveLoanerForm" type="button"
+							class="btn btn-primary loanerButton loanerButtonEnableable" onclick="saveLoanerForm()"
+							disabled tabindex="16">Save</button>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="margin-bottom: -15px; display:none; padding-top: 10px;">
+					<p id="loanerPickupStatement" class="loanerStatement"></p>
+				</div>
+				<div class="row showWhenPrint" style="display:none;">
+					<div class="col">
+						<h5 class="loanerDropOffSig" id="loanerDropOffSigLine" style="background-color: #ffd36e"><span
+								style="padding-top:10px;">Customer Pick-Up Signature:</span><span
+								id="loanerDateTimeLabel" class="dateDropOffSig">xx/xx/xxxx xx:xx pm</span></h5>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="display:none; padding-top: 50px;">
+					<div class="col">
+						<h5 class="loanerDropOffSig" id="loanerDropOffSigLine2"><span style="padding-top:10px;">Manager
+								Release Signature:</span><span id="loanerDateTimeLabel2" class="dateDropOffSig">
+								xx/xx/xxxx xx:xx pm</span>
+						</h5>
+					</div>
+				</div>
+				<div class="row showWhenPrint" style="display:none;">
+					<div class="col">
+						<h5 class="loanerDropOffSig"><span style="padding-right: 19px; padding-top:10px;">Manager
+								Collection
+								Signature:</span><span class="loanerDropOffSigLine3"
+								style="padding-left: 90px; margin-top: 2px; float:right;">__/__/____</span></h5>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div id="settingsEdit" style="display:none;" class="panel">
+				<div class="d-flex align-items-start">
+					<div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+						aria-orientation="vertical">
+						<button class="nav-link" id="v-pills-back-tab" type="button" role="tab"
+							aria-controls="v-pills-back" aria-selected="false" onclick="backToMain()">Back</button>
+						<button class="nav-link active" id="v-pills-users-tab" data-bs-toggle="pill"
+							data-bs-target="#v-pills-users" type="button" role="tab" aria-controls="v-pills-users"
+							aria-selected="true">Users</button>
+						<button class="nav-link" id="v-pills-loaners-tab" data-bs-toggle="pill"
+							data-bs-target="#v-pills-loaners" type="button" role="tab" aria-controls="v-pills-loaners"
+							aria-selected="false">Loaners</button>
+						<button class="nav-link" id="v-pills-database-tab" data-bs-toggle="pill"
+							data-bs-target="#v-pills-database" type="button" role="tab" aria-controls="v-pills-database"
+							aria-selected="false">Database</button>
+					</div>
+					<div class="tab-content" id="v-pills-tabContent">
+						<div class="tab-pane fade show active" id="v-pills-users" role="tabpanel"
+							aria-labelledby="v-pills-users-tab" tabindex="0" id="usersSettingsPanel">
+							<ul class="list-group list-group-flush" id="usersSettingsData">
+							</ul>
+						</div>
+						<div class="tab-pane fade" id="v-pills-loaners" role="tabpanel"
+							aria-labelledby="v-pills-loaners-tab" tabindex="0" id="loanerSettingsPanel">
+							<div class="accordion" id="accordionLoaners">
+
+							</div>
+						</div>
+						<div class="tab-pane fade" id="v-pills-database" role="tabpanel"
+							aria-labelledby="v-pills-database-tab" tabindex="0">
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Unsaved Changes -->
+		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+			<div class="toast align-items-center text-white bg-danger border-0" role="alert" id="unsavedToast"
+				aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+				<div class="d-flex">
+					<div class="toast-body" id="unsavedToastText">
+						Unsaved changes!
+						<div class="unsaved-changes-buttons">
+							<button type="button" class="btn btn-success small-button"
+								onclick="saveConfig()">Save</button>
+							<button type="button" class="btn btn-secondary small-button"
+								onclick="revertChanges()">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Copy Toast -->
+		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+			<div class="toast align-items-center text-white bg-primary border-0" role="alert" id="liveToast"
+				aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body" id="toastText">
+						Message
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Old Repair Open Modal -->
+		<div class="modal fade" id="oldRepairOpenModal" data-bs-backdrop="static" data-bs-keyboard="false"
+			tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">There is an open repair with this serial number</h5>
+					</div>
+					<div class="modal-body">
+						<button style="width: 33%; margin-top: 20px;" type="button" class="btn btn-secondary"
+							onclick="cancelRepairForm()">Cancel this repair</button>
+						<button style="width: 33%; margin-top: 20px; float:right" type="button" class="btn btn-primary"
+							onclick="closeOldRepair()">Close out the old repair</button>
+						<button style="width: 31%; float:right; padding-right: 10px; margin-right: 10px" type="button"
+							class="btn btn-info" onclick="clearSerialOldRepair()">Sorry I mistyped the serial number and
+							I wont do it
+							again :(</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Add Work Toast -->
+		<div class="position-fixed top-50 start-50 translate-middle" style="z-index: 11">
+			<div class="toast align-items-center border-0" role="alert" id="addWorkToast" aria-live="assertive"
+				aria-atomic="true" data-bs-autohide="false" style="width: 700px">
+				<div class="toast-header">
+					<strong class="me-auto" id="addWorkTitle">Add Work</strong>
+					<button type="button" class="btn-close" data-bs-dismiss="toast" onclick="closeSaveAsPopover();"
+						aria-label="Close"></button>
+				</div>
+				<div class="toast-body" id="toastTextAddWork">
+					<div class="row">
+						<div class="col-2"
+							style="padding-top:6px; padding-left:15px; padding-right:15px; width: 220px;">
+							<input id="addWorkDate" type="datetime-local" value="" style="width: 190px;">
+						</div>
+						<div class="col" style="padding-left: 0px;">
+							<select id="addWorkSelector" class="form-select header-inline workSelector"
+								aria-label="Select work completed">
+								<option value="Diagnosed" selected>Diagnosed</option>
+								<option value="Submitted Claim">Submitted Claim</option>
+								<option value="Submitted RFA">Submitted RFA</option>
+								<option value="Ordered Parts">Ordered Parts</option>
+								<option value="Sent Out">Sent Out</option>
+								<option value="Parts Arrived">Parts Arrived</option>
+								<option value="Waiting on DEP">Waiting on DEP</option>
+								<option value="Finished">Finished</option>
+								<option value="Attached File">Attached File</option>
+								<option value="Note">Note</option>
+							</select>
+						</div>
+						<div class="col saveWorkCol">
+							<button id="saveWorkButton" type="button" style="width: 100%"
+								class="btn btn-primary header-inline editWorkButtons" onclick="saveWork()"
+								disabled>Save</button>
+						</div>
+						<div class="col saveWorkCol">
+							<!--More generated in javascript-->
+							<button type="button" id="saveWorkAsButton" style="width: 100%"
+								class="btn btn-primary header-inline editWorkButtons" onclick="changeEmployee()"
+								data-bs-toggle="popover" data-bs-html="true" title="Save As" disabled>Save As</button>
+						</div>
+					</div>
+					<div class="row secondRowAddWork">
+						<div class="col">
+							<input type="text" class="form-control header-inline" id="noteTextInput"
+								placeholder="notes (optional)">
+						</div>
+						<div id="deleteButtonCol" class="col-auto" style="padding-left: 0px;" style="display:none;">
+							<button id="deleteWorkButton" type="button"
+								class="btn btn-danger header-inline editWorkButtons" onclick="deleteWork()"
+								data-bs-content="Click 5 more times to delete." disabled>Delete</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Login Modal -->
+		<div class="position-fixed top-50 start-50 translate-middle" style="z-index: 13">
+			<div class="toast align-items-center border-0" role="alert" id="loginToast" aria-live="assertive"
+				aria-atomic="true" data-bs-autohide="false" style="width: initial;">
+				<div class="toast-header">
+					<strong class="me-auto" id="addWorkTitle">Log In</strong>
+					<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+				<div class="toast-body" id="toastTextLogin">
+					<!-- Generated in JS -->
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Edit Repair Modal -->
+		<div class="modal fade" id="editRepairModal" tabindex="-1" aria-labelledby="editRepairModal" aria-hidden="true"
+			data-bs-backdrop="static" data-bs-keyboard="false">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Edit Repair</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Customer Name</span>
+								<input id="customerNameEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Email</span>
+								<input id="emailEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Phone Number</span>
+								<input id="phoneEditForm" type="text" class="form-control" placeholder="">
+							</div>
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Serial Number</span>
+								<input id="serialEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Purch Date</span>
+								<input id="purchaseDateEditForm" type="text" class="form-control" placeholder="">
+							</div>
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Warranty</span>
+								<input id="warrEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Make</span>
+								<input id="makeEditForm" type="text" class="form-control" placeholder="">
+							</div>
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Model</span>
+								<input id="modelEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Accessories</span>
+								<input id="accEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Stated Problem</span>
+								<input id="probEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Intake Notes</span>
+								<input id="notesEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">iPad SN</span>
+								<input id="iPadSerialEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Address 1</span>
+								<input id="address1EditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Address 2</span>
+								<input id="address2EditForm" type="text" class="form-control" placeholder="">
+							</div>
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">City</span>
+								<input id="cityEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">State</span>
+								<input id="stateEditForm" type="text" class="form-control" placeholder="">
+							</div>
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">Zip</span>
+								<input id="zipEditForm" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div id="editRepairGroup" class="input-group" style="float: right;">
+							<select id="editRepairWorkerSelector" style="width:140px; flex: initial; margin-left: auto;"
+								class="form-select header-inline" aria-label="Edit Employee"
+								onmousedown="removeFirstEditRepairEmployee();">
+								<!--generated in loadConfig js-->
+							</select>
+							<button id="saveEditRepairButton" type="button" class="btn btn-primary"
+								data-bs-dismiss="modal" onclick="saveEditRepair()">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Journal Modal -->
+		<div class="modal fade" id="logsModel" tabindex="-1" aria-labelledby="logsModel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="repairJournalTitle">Repair Journal</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="logsModelBody">
+						<div id="noLogsLabel" style="display:none;">
+							<p>No information on this repair, how odd.</p>
+						</div>
+						<table class="table" id="logsTable">
+							<thead>
+								<tr>
+									<th scope="col">Who</th>
+									<th scope="col">When</th>
+									<th scope="col">What</th>
+								</tr>
+							<tbody id="logsTableBody">
+								<!-- Generated in showLogs() -->
+							</tbody>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Adddress Edit Modal -->
+		<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModal" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addAddressModalTitle">Repair Address</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+							onclick="clearAddressForm()"></button>
+					</div>
+					<div class="modal-body" id="addAddressModelBody" style="margin-right: 12px;">
+						<div class="row address-form" style="padding-top: 0;">
+							<div class="col address-form-input">
+								<input type="text" class="form-control" id="addressForm1" placeholder="123 Main St.">
+							</div>
+						</div>
+						<div class="row address-form">
+							<div class="col address-form-input">
+								<input type="text" class="form-control" id="addressForm2" placeholder="Apt. A">
+							</div>
+						</div>
+						<div class="row address-form">
+							<div class="col-6 address-form-input">
+								<input type="text" class="form-control" id="cityForm" placeholder="Columbus">
+							</div>
+							<div class="col-4 address-form-input">
+								<input type="text" class="form-control" id="stateForm" placeholder="Ohio">
+							</div>
+							<div class="col-2 address-form-input">
+								<input type="text" class="form-control" id="zipForm" placeholder="43210"
+									style="padding-right: 0;">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button id="addAddressModalOkay" type="button" class="btn btn-primary"
+							data-bs-dismiss="modal">Okay</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Issue Loaner Model -->
+		<div class="modal fade" id="loanerModal" tabindex="-1" aria-labelledby="loanerModal" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="issueLoanerTitle">Issue Loaner</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="loanerModelBody">
+						<input id="assetTagForm" type="text" class="form-control" placeholder="Asset Tag">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Save changes in settings toast -->
+		<div id="settingsSaveChangesToast" class="toast align-items-center" role="alert" aria-live="assertive"
+			aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body">
+					Hello, world! This is a toast message.
+				</div>
+				<button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+		</div>
+
+		<!-- Save Confirm Model -->
+		<div class="modal fade" id="saveConfirmModal" tabindex="-1" aria-labelledby="saveConfirmModal"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Are you sure?</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<h5>Saving will restart all open instances of RepaDex, please confirm.</h5>
+						<button class="btn btn-primary" type="button" aria-label="Yes"
+							onclick="confirmSaveConfig()">Confirm</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Loaner Error Model -->
+		<div class="modal fade" id="loanerErrorModal" tabindex="-1" aria-labelledby="loanerErrorModal"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="loanerErrorTitle">Issue Loaner Error</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="loanerErrorModelBody">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Loaner Check In Model -->
+		<div class="modal fade" id="loanerCheckInModal" tabindex="-1" aria-labelledby="loanerCheckInModal"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="loanerCheckInTitle">Check In Loaner</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="loanerCheckInBody">
+						<div id="addLoanerInputs">
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text">Scan Asset Tag</span>
+									<input id="loanerCheckInAssetTag" type="text" class="form-control" placeholder=""
+										oninput="validateLoanerCheckIn()">
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text">Condition Received</span>
+									<input id="loanerCheckInCondition" type="text" class="form-control" placeholder=""
+										oninput="validateLoanerCheckIn()">
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text">Value Received</span>
+									<input id="loanerCheckInValue" type="text" class="form-control" placeholder=""
+										oninput="loanerValueInput('loanerCheckInValue'); validateLoanerCheckIn()">
+								</div>
+							</div>
+							<button id="loanerCheckInDoneButton" class="btn btn-primary" type="button"
+								aria-label="Add it" onclick="finishCheckIn()" disabled>Finish Check In</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Loaner Add Model -->
+		<div class="modal fade" id="addLoanerModal" tabindex="-1" aria-labelledby="addLoanerModal" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="loanerErrorTitle">Add/Edit Loaner</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="addLoanerModalBody">
+						<div id="addLoanerInputs">
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text const-width-1">Asset Tag</span>
+									<input id="loanerAddAssetTag" type="text" class="form-control" placeholder=""
+										disabled>
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text const-width-1">Serial Number</span>
+									<input id="loanerAddSerialNumber" type="text" class="form-control" placeholder=""
+										oninput="validateloanerDoneButton()">
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text const-width-1">Make</span>
+									<input id="loanerAddMake" type="text" class="form-control" placeholder=""
+										oninput="validateloanerDoneButton()">
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text const-width-1">Model</span>
+									<input id="loanerAddModel" type="text" class="form-control" placeholder=""
+										oninput="validateloanerDoneButton()">
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text const-width-1">Accessories</span>
+									<input id="loanerAddAccessories" type="text" class="form-control" placeholder=""
+										oninput="validateloanerDoneButton()">
+								</div>
+							</div>
+							<button id="loanerAddDoneButton" class="btn btn-primary" type="button" aria-label="Add it"
+								onclick="saveNewLoaner()" disabled>Done</button>
+						</div>
+						<!--<svg style="display:none" id="addLoanerCheck" class="checkmark" xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 52 52">
+						<circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+						<path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+					</svg>-->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Emergency Button Model -->
+		<div class="modal fade" id="emButtonModal" tabindex="-1" aria-labelledby="emButtonModal" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">EMERGENCY!!! It broke :(</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p>Please read all, even if you have read it before: I see Repadex seems to be broken, you can
+							click
+							the Emergency Button below if you would like to override the safe guards of the system, if
+							you
+							decide to do this, first you have to make sure who/whatever is listed in the top right has
+							the
+							program closed forcefully (it has the lock and isnt releasing it so we gotta close it in
+							order
+							to make sure it doesnt change the database without having a lock), IF YOU SKIP THIS STEP
+							THERE
+							IS A CHANCE OF DATABASE CORRUPTION (DONT SKIP IT). Once the offending program is closed you
+							can
+							click the Emergency Button and it will resolve the problem - Thanks, Max</p>
+						<div style="text-align: center;">
+							<map name="workmap">
+								<area shape="circle" coords="250,200,50" alt="The Button" href="javascript:void(0)"
+									onclick="overrideSafe()">
+							</map>
+							<img src="embUTTON.png" width="500" height="500" usemap="#workmap">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Warning Loaner Model -->
+		<div class="modal fade" id="loanerWarningModal" tabindex="-1" aria-labelledby="loanerWarningModal"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Customer has loaner!</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<p>The customer has a loaner, please get a manager or repair technician to check it in</p>
+						<p>If the customer does not have the loaner computer, you cannot give their computer back</p>
+					</div>
+					<div class="modal-footer">
+						<button id="loanerWarningOkayButton" type="button" class="btn btn-primary"
+							data-bs-dismiss="modal">Okay</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Already had computer checked in -->
+		<div class="modal fade" id="copyComputerModal" tabindex="-1" aria-labelledby="copyComputerModal"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Customer has had a device here before, copy?</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="copyComputerModalBody">
+						<select id="copyComputerSelector" class="form-select header-inline" aria-label="Select copy">
+							<!--generated in js-->
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button id="copyComputerModalYesButton" type="button" class="btn btn-primary"
+							data-bs-dismiss="modal" onclick="loadCopy()">Yes</button>
+						<button id="copyComputerModalNoButton" type="button" class="btn btn-danger"
+							data-bs-dismiss="modal">No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Picked Up Modal -->
+		<div class="modal fade" id="pickupModal" tabindex="-1" aria-labelledby="pickupModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="pickedUpTitle">Date Picked Up</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="logsModelBody">
+						<div class="input-group">
+							<select id="editDateWorkerSelector" style="width:140px; flex: initial;"
+								class="form-select header-inline" aria-label="Edit Employee"
+								onmousedown="removeFirstEditWorkEmployee();">
+								<!--generated in loadConfig js-->
+							</select>
+							<input class="datePickedUpDate" id="dateEditPickedUpForm" type="datetime-local" value="">
+							<button id="saveDatePickedUpButton" type="button" class="btn btn-primary header-inline"
+								onclick="saveDatePickedUp()" disabled>Save</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- About Modal -->
+		<div class="modal fade" id="aboutModal" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="aboutModalLabel">About RepaDex</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div style="display: flex;">
+							<img src="Logo.png" height="50px"></img>
+							<h4 style="display: inline; padding-top: 10px;">Created by <a href="javascript:void(0)"
+									onclick='window.api.send("toMain", "openhttp://www.maxfojtik.com");'>Maxwell
+									Fojtik</a>
+								in 2021</h4>
+						</div>
+						<div>
+							<h4 style="padding-left: 50px;"><a href="javascript:void(0)"
+									onclick='window.api.send("toMain", "openhttps://github.com/Maxfojtik/RapaDex");'>Source
+									code</a> and <a href="javascript:void(0)"
+									onclick='window.api.send("toMain", "openhttps://github.com/Maxfojtik/RapaDex/blob/main/documentation.txt");'>changelog</a>
+							</h4>
+							<h4 style="padding-left: 50px;"><a href="javascript:void(0)"
+									onclick='window.api.send("toMain", "openK:/BF/PRSM/TechHub/RepaDex/configuration.json");'>Open
+									Configuration</a></h4>
+							<h4 style="padding-left: 50px;"><a href="javascript:void(0)"
+									onclick='exportDatabase()'>Export
+									Database</a></h4>
+						</div>
+						<div class="settings-gear">
+							<img id="settings-gear" src="gear-fill.svg" height="30px"
+								class="versionClickable rotateWhenHover" onclick="openSettings()"></img>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Attach File Modal -->
+		<div class="modal fade" id="attachModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+						<h1 id="attachMessage">Attach File</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="pokeball" class="attachmentPokeball">
+			<img src="paperclip.svg" width="150px" height="150px"></img>
+		</div>
+		<!-- Footer -->
+		<div style="height: 30px; line-height: initial;" class="hideWhenPrint">
+			<div style="float: right; padding-right: 10px;">
+				<span class="text-muted" id="loggedInAsLabel" onclick="showLoginToast()"
+					style="cursor: pointer;"></span>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
