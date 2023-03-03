@@ -1,0 +1,166 @@
+Documentation:
+
+Never remove employees, it will break old forms... only set them as not active, when you set one as not active you can reuse the color
+
+Version formatting:
+
+1.(Major changes).(minor changes)letter(bugfix, quality of life and style changes)
+
+
+
+ChangeLog:
+1.0.2:
+	Changed how incRefNum works, now gets it if the save buttons become enabled because Im annoyed how we are missing numbers
+	Also cleaned up how selector for picked up looks
+	made search happen every type
+	added a refresh button
+	added version next to the logo
+1.0.3:
+	fixed size of create new repair
+	fixed not being able to go back
+	added option for waiting for DEP
+1.0.4:
+	added accountability to editing repairs
+	fixed bug where intake notes not clearing
+	...and problem box
+1.0.5a:
+	added color formatting to table
+	fixed bug with am/pm indicator
+1.0.5b:
+	clear iPadSN
+1.0.5c:
+	sped up locking/unlocking process
+1.0.5d:
+	made textareas auto resize
+	fixed problemTextArea not being cleared
+	disabled the save and save and print buttons more often
+1.0.6a:
+	made repair notes exempt from above
+	clicking enter on search when there is one repair opens it
+1.0.6b:
+	still didnt fix the cut off problem but now I did... I think...
+1.0.7:
+	still didnt fix the cut off problem but now I did... I think... second time....
+	pick up date was actually the start date lol
+	format phone and make it required
+1.0.7a:
+	force Serial number uppercase
+	validate save buttons when phone type
+1.0.7b:
+	force iPad serial number uppercase
+1.0.7c:
+	fixed front to display top 100
+1.0.7d:
+	make phone form invalid for next repair
+1.0.7e:
+	fixed enter to search not working
+1.0.7f:
+	fixed all repairs not showing when backspaced all the way
+1.0.7g:
+	make it so you can clear out the date and unmark repairs as picked up - was a bug that you couldn't pick stuff up
+1.0.8:
+	make phone requirement optional when departmental is selected - is a feature, was not a bug
+	also added regex to email
+1.0.8a:
+	fixed autofilling email not validating the buttons
+	fixed intake notes resize
+1.0.8b:
+	changed sent out location
+	added Purchase Date to edit repair modal
+1.0.8c:
+	changed sent out location
+	added Purchase Date to edit repair
+	fixed bug where if we try to lock without a network connection it crashes
+	made name and phone copiable
+1.0.9:
+	added update button
+	fixed making name and phone copiable
+1.0.9a:
+	changed color of stuck
+1.0.9b:
+	when no work, says repair form created
+1.0.9c:
+	changed update color for chloe
+	made some fades and changed some underline stuff
+1.0.9d:
+	fixed iPadSN requirement not updated when selecting Other make or model
+1.0.9e:
+	fixed phone being weird and
+	close subtype when backing
+	make the phone number less strict as per cory's suggestion
+1.0.9f:
+	fixed log not being updated correctly when marking picked up.
+	also changed what the log says when picked up
+1.0.10:
+	added simple loaners
+1.0.11:
+	added spell check and if there is an old repair it tells you when entering new serial
+1.0.11a:
+	changed tab orderering
+1.0.11b:
+	added error screen for when we can't start
+1.0.11c:
+	version kicking down techhub logOut
+1.0.11d:
+	worker select not working
+1.0.12:
+	fixed problem with email autosearch with caps
+	fixed problem text area not being resized properly after printing
+	modal for when there is a loaner out and we take the computer back
+1.0.12a:
+	serial number barcode has lowercase at the end? fixed.
+	enter on note saves the work
+1.0.13:
+	added filters to front screen
+	added the ability for it to find similar serial numbers when the entered one does not match any
+1.0.13a:
+	fixed button being stupid
+1.0.13b:
+	fixed add work not going away when going back to the main menu.
+	added a select all filter option
+1.0.14:
+	fixed problem with when closing an open repair it does not go back after saving
+	added iPad screen
+1.0.15:
+	fixed issue with being able to esc when on repair screen
+	added the ability to enter an address into a repair
+	pickup dropdown now takes into account if they are still active
+	make the worker font size configurable
+	make it so if there is something in the search bar when it loads it automatically searches
+	added an about page
+	fancified the create new repair button
+	fixed issue where inactive employees were in the edit repair modal
+1.0.15a:
+	fixed appt. -> apt.
+	fixed width of add address
+1.0.15b:
+	make all emails lowercase
+	also clear out addresses when switching repairs
+1.0.16:
+	added the ability to attach files to repairs
+	make notes show in front if there is no other work
+1.0.16a:
+	made make and model in descriptors
+1.0.16b:
+	added another option for when the serial number already has a repair
+1.0.17:
+	clear loaner textarea when opening the modal
+	added the ability to copy names and phone numbers from name.number
+	added a date selector for started and finished repairs in front filter
+1.0.17a:
+	cleared up id generation and added blame
+	make it you can override the safety systems
+1.0.17b:
+	changed literature of the emergency button, also made the button a button
+	added a loading screen when trying to copy configuration
+1.0.17c:
+	added steph's request (do I remember what it was? no.)
+1.1.0:
+	added loaners
+	added settings
+	changed to Dark Mode!
+	updated bootstrap to 5.3 alpha for darkmode
+	updated electron
+	made the warnings hide if going back to front
+	created custom topbar
+	moved to electron forge for packaging
