@@ -161,7 +161,7 @@ ChangeLog:
 	changed to Dark Mode!
 	updated bootstrap to 5.3 alpha for darkmode
 	updated electron
-	made the warnings hide if going back to front
+	made the warnings hide if going to front page
 	created custom topbar
 	moved to electron forge for packaging
 	make that if it does not have focus for 10 minutes, refresh, then loop

@@ -1,3 +1,5 @@
+/out/RepaDex-win32-x64
+
 # Logs
 logs
 *.log
@@ -85,5 +87,5 @@ typings/
 # Webpack
 .webpack/
 
-# Electron-Forge
-out/
+out/make/squirrel.windows/x64/RepaDex-1.0.0-full.nupkg
+out/make/squirrel.windows/x64/RELEASES
