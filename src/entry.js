@@ -15,8 +15,8 @@ if (require('electron-squirrel-startup')) {
 	app.quit();//if this is first time running
 }
 
-// var remotePath = "K:/BF/PRSM/TechHub/RepaDex";
-var remotePath = "C:/Users/Maxwell/Documents/GitHub/Repadex";
+var remotePath = "K:/BF/PRSM/TechHub/RepaDex";
+// var remotePath = "C:/Users/Maxwell/Documents/GitHub/Repadex";
 var iPad = fs.existsSync("C:/IAmiPad");
 
 if (iPad) {
@@ -24,7 +24,7 @@ if (iPad) {
 }
 var configPath = remotePath + "/configuration.json";
 var configPathLocalFolder = path.join(process.env.APPDATA, '..', 'Local', 'RepaDex');
-var configPathLocal = configPathLocalFolder + "configuration.json";
+var configPathLocal = path.join(configPathLocalFolder, "configuration.json");
 var backendPath = "";//JSON.parse(configTxt).backendPath;
 var lockedPath = "";//JSON.parse(configTxt).lockFilePath;
 var versionFile = "";
