@@ -164,3 +164,5 @@ ChangeLog:
 	made the warnings hide if going back to front
 	created custom topbar
 	moved to electron forge for packaging
+	make that if it does not have focus for 10 minutes, refresh, then loop
+	changed tab order in save work modal

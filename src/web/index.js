@@ -6,6 +6,11 @@ var newVersion = "";
 var shownPanel = 0;//0 = main table, 1 = repairEdit, 2 = repairForm, 3 = loanerForm, 4 = repair warning, 5 = updating, -1 = settings
 var darkMode = true;
 var emButtonModal;
+var refreshTimer;
+
+$(window).focus(function () { clearInterval(refreshTimer); });
+$(window).blur(function () { refreshTimer = setInterval(loadAll, 10 * 60 * 1000); });
+
 $(document).ready(function () {
 	loadConfiguration();
 	$("#searchInput").select();

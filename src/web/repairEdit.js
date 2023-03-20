@@ -3,7 +3,7 @@ var addedWorkRefNum = 0;
 var addWorkToast;
 var loginToast;
 var deleteClicksLeft;
-var dontOverrideWarranty = false;
+var dontOverrideWarranty = false
 var dontOverrideProblem = false;
 var checkingInLoaner = false;
 var attachModal;
@@ -803,6 +803,7 @@ function finishCheckIn() {
 	}
 	loanerJSON["checkOut"]["conditionReceived"] = $("#loanerCheckInCondition").val();
 	loanerJSON["checkOut"]["valueReceived"] = $("#loanerCheckInValue").val();
+	loanerJSON["checkOut"]["dateReceived"] = new Date($("#loanerDateForm").val()).toJSON();
 	loanerJSON["history"].push(loanerJSON["checkOut"]);
 	delete loanerJSON["checkOut"];
 	checkingInLoaner = true;

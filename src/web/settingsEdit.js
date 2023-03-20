@@ -28,26 +28,101 @@ function changedBlackText(employee) {
     determineIfUsersChanged();
 }
 
+function addNewUser() {
+    var modal = bootstrap.Modal.getOrCreateInstance('#addUserModal');
+    modal.show();
+}
+
+function saveNewUser() {
+    addingANewEmployee = true;
+    var modal = bootstrap.Modal.getOrCreateInstance('#addUserModal');
+    modal.hide();
+    var modal = bootstrap.Modal.getOrCreateInstance('#saveConfirmModal');
+    modal.show();
+}
+
 function setupSettingsLoaners() {
     $("#accordionLoaners").empty();
     for (var tag in backendData["loaners"]) {
         var loaner = backendData["loaners"][tag];
-        // var innerHTML = "<div class=\"settings-loaner-label\">" + tag + "</div>";
-        // innerHTML += "<div class=\"settings-loaner-make-model\">" + loaner["make"] + " " + loaner["model"] + "</div>";
-        // var lonaerHTML = "<li class=\"list-group-item settings-loaner-line\">" + innerHTML + "</li>";
-        // $("#loanerSettingsData").append(lonaerHTML);
-        var accordionItem = "<div class=\"accordion-item\">";
+        var backgroundColor = "background: var(--bs-success-border-subtle);";
+        var insideButton = loaner["make"] + " " + loaner["model"] + " : " + tag;
+        if (loaner["checkOut"]) {
+            backgroundColor = "background: var(--bs-warning-border-subtle);";
+            var date = new Date(loaner["checkOut"]["dateReleased"]);
+            var dateReleasedText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
+            insideButton += "<span style=\"padding-left: 100px;\">Ref Num: " + loaner["checkOut"]["refNum"] + ";  " + loaner["checkOut"]["whoStarted"] + " checked it out on " + dateReleasedText + " to " + backendData["repairs"][loaner["checkOut"]["refNum"]]["name"] + "</span>";
+        }
+        var accordionItem = "<div class=\"accordion-item\" style=\"" + backgroundColor + "\">";
         var header = "<h2 class=\"accordion-header\" id=\"heading" + tag + "\">";
-        var accordionButton = "<button class=\"accordion-button collapsed\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#collapse" + tag + "\" aria-expanded=\"false\" aria-controls=\"collapse" + tag + "\">" + loaner["make"] + " " + loaner["model"] + " : " + tag + "</button>";
+        var accordionButton = "<button style=\"" + backgroundColor + "\" class=\"accordion-button collapsed\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#collapse" + tag + "\" aria-expanded=\"false\" aria-controls=\"collapse" + tag + "\">" + insideButton + "</button>";
         var headerEnd = "</h2>";
         var accordionInside = "<div id=\"collapse" + tag + "\" class=\"accordion-collapse collapse\" aria-labelledby=\"headingOne\" data-bs-parent=\"#accordion" + tag + "\">";
         var accordionBody = "<div class=\"accordion-body\">";
-        var accordionBodyText = "Loaner Text";
+
+        var accordionBodyText = "<ul class=\"list-group list-group-flush\">";
+        if (loaner["history"]) {
+            for (var i in loaner["history"]) {
+                var historyEntry = loaner["history"][i];
+                var innerAccord = "";
+                var date = new Date(historyEntry["dateReleased"]);
+                var dateRelText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
+                date = new Date(historyEntry["dateReceived"]);
+                var dateReceText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
+                innerAccord += "<div class=\"settings-history-who-started\">" + getPill(config.employees[historyEntry["whoStarted"]]["name"], historyEntry["whoStarted"], "", "") + "</div>";
+                innerAccord += "<div class=\"settings-history-ref\">" + historyEntry["refNum"] + "</div>";
+                innerAccord += "<div class=\"settings-history-value-released\">" + historyEntry["valueReleased"] + "</div>";
+                innerAccord += "<div class=\"settings-history-valueReceived\">" + historyEntry["valueReceived"] + "</div>";
+                innerAccord += "<div class=\"settings-history-conditionReleased\">" + historyEntry["conditionReleased"] + "</div>";
+                innerAccord += "<div class=\"settings-history-conditionReceived\">" + historyEntry["conditionReceived"] + "</div>";
+                innerAccord += "<div class=\"settings-history-dateReleased\">" + dateRelText + "</div>";
+                innerAccord += "<div class=\"settings-history-dateReceived\">" + dateReceText + "</div>";
+                accordionBodyText += "<li class=\"list-group-item settings-loaner-line\">" + innerAccord + "</li>";
+                // <ul class="list-group list-group-flush">
+                //     <li class="list-group-item">An item</li>
+                //     <li class="list-group-item">A second item</li>
+                //     <li class="list-group-item">A third item</li>
+                //     <li class="list-group-item">A fourth item</li>
+                //     <li class="list-group-item">And a fifth one</li>
+                // </ul>
+            }
+        }
+
+
+        // "loanerTag2": {
+        //     "number": "loanerTag2",
+        //     "serial": "loanerSerial2",
+        //     "make": "Apple",
+        //     "model": "Macbook Pro",
+        //     "acc": "Charger, Bag",
+        //     "history": [
+        //         {
+        //             "whoStarted": "fojtik.6",
+        //             "refNum": "20556",
+        //             "valueReleased": "$123",
+        //             "conditionReleased": "Great.",
+        //             "dateReleased": "2023-03-03T15:54:00.000Z",
+        //             "conditionReceived": "Great.",
+        //             "valueReceived": "$123"
+        //         },
+        //         {
+        //             "whoStarted": "fojtik.6",
+        //             "refNum": "20556",
+        //             "valueReleased": "$123",
+        //             "conditionReleased": "Great.",
+        //             "dateReleased": "2023-03-03T19:09:00.000Z",
+        //             "conditionReceived": "Great.",
+        //             "valueReceived": "$123"
+        //         }
+        //     ]
+        // }
+
         var accordionBodyEnd = "</div>";
         var accordionInsideEnd = "</div>";
         var accordionItemEnd = "</div>";
         var accordionHTML = accordionItem + header + accordionButton + headerEnd + accordionInside + accordionBody + accordionBodyText + accordionBodyEnd + accordionInsideEnd + accordionItemEnd;
         $("#accordionLoaners").append(accordionHTML);
+
     }
 }
 
@@ -130,6 +205,20 @@ function confirmSaveConfig() {
         config.employees[employee]["active"] = $("#settings-employee-" + smallEm + "-check-active").is(":checked");
         config.employees[employee]["black-text"] = $("#settings-employee-" + smallEm + "-check-black").is(":checked");
         config.employees[employee]["color"] = document.getElementById("settings-employee-" + smallEm + "-color").value;
+    }
+    if (addingANewEmployee) {
+        addingANewEmployee = false;
+        var nameNumber = $("#addUserNameNumber").val();
+        var commonName = $("#addUserName").val();
+        var color = $("#addUserColor").val();
+        var blackText = $("#addUserBlackText").val();
+        config.employees[nameNumber] = {};
+        config.employees[nameNumber]["name"] = commonName;
+        config.employees[nameNumber]["color"] = color;
+        config.employees[nameNumber]["black-text"] = blackText == "true";
+        config.employees[nameNumber]["repairTeam"] = false;
+        config.employees[nameNumber]["manager"] = false;
+        config.employees[nameNumber]["active"] = true;
     }
     window.api.send("toMain", "saveConfig" + JSON.stringify(config));
     shownPanel = 5;

@@ -1,8 +1,7 @@
 module.exports = {
-  packagerConfig: {},
   rebuildConfig: {},
   packagerConfig: {
-    icon: '/images/RepaDexFin' // no file extension required
+    icon: 'src//RepaDexFin' // no file extension required
   },
   makers: [
     {

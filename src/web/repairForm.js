@@ -945,13 +945,18 @@ function changeStyleOfProgram(printing) {
 		$(".navbar").hide();
 		$("html").attr("data-bs-theme", "light");
 		$("body").get(0).style.setProperty("--h5-color", "initial");
-
+		$(".label-light").addClass("label-light-print");
+		$(".label-light-print").removeClass("label-light");
+		$("#dex").css("color", "#000");
 	}
 	else {
 		$(".navbar").show();
 		if (darkMode) {
-			$("html").attr("data-bs-theme", "light");
+			$("html").attr("data-bs-theme", "dark");
 			$("body").get(0).style.setProperty("--h5-color", "#ccc");
+			$(".label-light-print").addClass("label-light");
+			$(".label-light").removeClass("label-light-print");
+			$("#dex").css("color", "#ccc");
 		}
 	}
 }

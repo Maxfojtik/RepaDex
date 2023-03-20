@@ -89,9 +89,6 @@ function saveLoanerForm() {
 }
 function unMakeLoanerPrintable() {
 	changeStyleOfProgram(false);
-	if (darkMode) {
-		$("html").attr("data-bs-theme", "dark");
-	}
 	$("#loanerConditionTextArea").css("width", "initial");
 	$("#loanerConditionTextArea").css("flex", "");
 	$(".loanerCheckboxes").css("font-size", "30px");
@@ -112,7 +109,6 @@ function unMakeLoanerPrintable() {
 }
 function makeLoanerFormPrintable() {
 	changeStyleOfProgram(true);
-	$("html").attr("data-bs-theme", "light");
 	$("#mainTitle").css("font-size", "75px");
 	$("#techLogo").css("height", "80px");
 	$("#loanerDateFormPrint").val(new Date($("#dateForm").val()).toDateString());

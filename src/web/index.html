@@ -777,10 +777,12 @@
 					<div class="tab-content" id="v-pills-tabContent">
 						<div class="tab-pane fade show active" id="v-pills-users" role="tabpanel"
 							aria-labelledby="v-pills-users-tab" tabindex="0" id="usersSettingsPanel">
+							<button type="button" class="btn btn-primary" onclick="addNewUser()">Add a new
+								User</button>
 							<ul class="list-group list-group-flush" id="usersSettingsData">
 							</ul>
 						</div>
-						<div class="tab-pane fade" id="v-pills-loaners" role="tabpanel"
+						<div class="tab-pane fade settings-loaner" id="v-pills-loaners" role="tabpanel"
 							aria-labelledby="v-pills-loaners-tab" tabindex="0" id="loanerSettingsPanel">
 							<div class="accordion" id="accordionLoaners">
 
@@ -788,7 +790,7 @@
 						</div>
 						<div class="tab-pane fade" id="v-pills-database" role="tabpanel"
 							aria-labelledby="v-pills-database-tab" tabindex="0">
-
+							WIP
 						</div>
 					</div>
 				</div>
@@ -866,7 +868,7 @@
 						</div>
 						<div class="col" style="padding-left: 0px;">
 							<select id="addWorkSelector" class="form-select header-inline workSelector"
-								aria-label="Select work completed">
+								aria-label="Select work completed" tabindex="100">
 								<option value="Diagnosed" selected>Diagnosed</option>
 								<option value="Submitted Claim">Submitted Claim</option>
 								<option value="Submitted RFA">Submitted RFA</option>
@@ -881,20 +883,21 @@
 						</div>
 						<div class="col saveWorkCol">
 							<button id="saveWorkButton" type="button" style="width: 100%"
-								class="btn btn-primary header-inline editWorkButtons" onclick="saveWork()"
-								disabled>Save</button>
+								class="btn btn-primary header-inline editWorkButtons" onclick="saveWork()" disabled
+								tabindex="102">Save</button>
 						</div>
 						<div class="col saveWorkCol">
 							<!--More generated in javascript-->
 							<button type="button" id="saveWorkAsButton" style="width: 100%"
 								class="btn btn-primary header-inline editWorkButtons" onclick="changeEmployee()"
-								data-bs-toggle="popover" data-bs-html="true" title="Save As" disabled>Save As</button>
+								data-bs-toggle="popover" data-bs-html="true" title="Save As" disabled
+								tabindex="103">Save As</button>
 						</div>
 					</div>
 					<div class="row secondRowAddWork">
 						<div class="col">
 							<input type="text" class="form-control header-inline" id="noteTextInput"
-								placeholder="notes (optional)">
+								placeholder="notes (optional)" tabindex="101">
 						</div>
 						<div id="deleteButtonCol" class="col-auto" style="padding-left: 0px;" style="display:none;">
 							<button id="deleteWorkButton" type="button"
@@ -1347,6 +1350,48 @@
 			</div>
 		</div>
 
+		<!-- Add User Modal -->
+		<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="pickedUpTitle">Add a new user</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" id="addUserModalBody">
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text">Name.Number (fojtik.6)</span>
+								<input id="addUserNameNumber" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text">Nick Name (Max)</span>
+								<input id="addUserName" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text">Color Code Hex (#08a78d)</span>
+								<input id="addUserColor" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3 col">
+								<span class="input-group-text">Black Text (true, false)</span>
+								<input id="addUserBlackText" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button id="" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+							onclick="saveNewUser()">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- Picked Up Modal -->
 		<div class="modal fade" id="pickupModal" tabindex="-1" aria-labelledby="pickupModal" aria-hidden="true">
 			<div class="modal-dialog">
@@ -1355,7 +1400,7 @@
 						<h5 class="modal-title" id="pickedUpTitle">Date Picked Up</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<div class="modal-body" id="logsModelBody">
+					<div class="modal-body" id="">
 						<div class="input-group">
 							<select id="editDateWorkerSelector" style="width:140px; flex: initial;"
 								class="form-select header-inline" aria-label="Edit Employee"
@@ -1390,9 +1435,9 @@
 						</div>
 						<div>
 							<h4 style="padding-left: 50px;"><a href="javascript:void(0)"
-									onclick='window.api.send("toMain", "openhttps://github.com/Maxfojtik/RapaDex");'>Source
+									onclick='window.api.send("toMain", "openhttps://github.com/Maxfojtik/RepaDex");'>Source
 									code</a> and <a href="javascript:void(0)"
-									onclick='window.api.send("toMain", "openhttps://github.com/Maxfojtik/RapaDex/blob/main/documentation.txt");'>changelog</a>
+									onclick='window.api.send("toMain", "openhttps://raw.githubusercontent.com/Maxfojtik/RepaDex/master/documentation.txt");'>changelog</a>
 							</h4>
 							<h4 style="padding-left: 50px;"><a href="javascript:void(0)"
 									onclick='window.api.send("toMain", "openK:/BF/PRSM/TechHub/RepaDex/configuration.json");'>Open
@@ -1423,14 +1468,13 @@
 		<div id="pokeball" class="attachmentPokeball">
 			<img src="paperclip.svg" width="150px" height="150px"></img>
 		</div>
-		<!-- Footer -->
-		<div style="height: 30px; line-height: initial;" class="hideWhenPrint">
-			<div style="float: right; padding-right: 10px;">
-				<span class="text-muted" id="loggedInAsLabel" onclick="showLoginToast()"
-					style="cursor: pointer;"></span>
-			</div>
-		</div>
 	</div>
+	<!-- Footer -->
+	<footer class="hideWhenPrint">
+		<div style="float: right; padding-right: 10px;">
+			<span class="text-muted" id="loggedInAsLabel" onclick="showLoginToast()" style="cursor: pointer;"></span>
+		</div>
+	</footer>
 </body>
 
 </html>

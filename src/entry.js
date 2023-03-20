@@ -6,18 +6,24 @@ const fs = require("fs");
 const crypto = require("crypto");
 const os = require("os");
 var win;
-
-if (require('electron-squirrel-startup')) app.quit();//if this is first time running
+// function getExe() {
+// 	return path.join(process.env.APPDATA, '..', 'Local', 'RepaDex', 'app-1.1.0', 'RepaDex.exe');
+// }
+// const createDesktopShortcut = require('create-desktop-shortcuts');
+// const shortcutsCreated = createDesktopShortcut(getExe());
+if (require('electron-squirrel-startup')) {
+	app.quit();//if this is first time running
+}
 
 // var remotePath = "K:/BF/PRSM/TechHub/RepaDex";
-var remotePath = "C:/Users/Maxwell/Documents/GitHub/Rapadex";
+var remotePath = "C:/Users/Maxwell/Documents/GitHub/Repadex";
 var iPad = fs.existsSync("C:/IAmiPad");
 
 if (iPad) {
 	remotePath = remotePath.replace("K:/BF/PRSM", "K:");
 }
 var configPath = remotePath + "/configuration.json";
-var configPathLocalFolder = (process.env.APPDATA || process.env.HOME) + "/repadex/";
+var configPathLocalFolder = path.join(process.env.APPDATA, '..', 'Local', 'RepaDex');
 var configPathLocal = configPathLocalFolder + "configuration.json";
 var backendPath = "";//JSON.parse(configTxt).backendPath;
 var lockedPath = "";//JSON.parse(configTxt).lockFilePath;
@@ -414,15 +420,15 @@ function createWindow() {
 	win = new BrowserWindow(
 		{
 			show: false,
-			titleBarStyle: 'hidden',
+			// titleBarStyle: 'hidden',
 			// titleBarOverlay: true,
-			// frame: false,
+			frame: false,
 			minWidth: 1220,
 			minHeight: 500,
 			width: 1600,
 			height: 900,
 			autoHideMenuBar: true,
-			icon: __dirname + '/RepaDexFin.ico',
+			icon: path.join(__dirname, '/RepaDexFin.ico'),
 			webPreferences: {
 				nodeIntegration: false, // is default value after Electron v5
 				contextIsolation: true, // protect against prototype pollution
@@ -430,6 +436,8 @@ function createWindow() {
 				preload: path.join(__dirname, "preload.js") // use a preload script
 			}
 		});
+	console.log(__dirname + '/RepaDexFin.ico' + ":" + fs.existsSync(__dirname + '\\RepaDexFin.ico'));
+	// win.setIcon(__dirname + "/RepaDexFin.ico");
 	win.on('close', (e) => {
 		tryClose(e);
 	});
@@ -482,25 +490,25 @@ function createWindow() {
 }
 var totalFilesToDelete = 0;
 var filesDeleted = 0;
-function deleteMyself() {
-	console.log("deleteMyself");
-	var directory = configPathLocalFolder + "/resources/app";
-	fs.readdir(directory, (err, files) => {
-		if (err) throw err;
-		totalFilesToDelete = files.length;
-		filesDeleted = 0;
-		for (const file of files) {
-			fs.unlink(path.join(directory, file), err => {
-				if (err) throw err;
-				filesDeleted++;
-				sendBack("fromMainUpdateProgress", ((filesDeleted / totalFilesToDelete) / 2 * 100) + "");
-				if (filesDeleted == totalFilesToDelete) {
-					copyANewVersion();
-				}
-			});
-		}
-	});
-}
+// function deleteMyself() {
+// 	console.log("deleteMyself");
+// 	var directory = configPathLocalFolder + "/resources/app";
+// 	fs.readdir(directory, (err, files) => {
+// 		if (err) throw err;
+// 		totalFilesToDelete = files.length;
+// 		filesDeleted = 0;
+// 		for (const file of files) {
+// 			fs.unlink(path.join(directory, file), err => {
+// 				if (err) throw err;
+// 				filesDeleted++;
+// 				sendBack("fromMainUpdateProgress", ((filesDeleted / totalFilesToDelete) / 2 * 100) + "");
+// 				if (filesDeleted == totalFilesToDelete) {
+// 					copyANewVersion();
+// 				}
+// 			});
+// 		}
+// 	});
+// }
 function copyANewVersion() {
 	console.log("copyANewVersion");
 	var directoryRemote = remotePath + "/repadex/resources/app";
@@ -521,17 +529,27 @@ function copyANewVersion() {
 		}
 	});
 }
-function update() {
-	deleteMyself();
-}
-function restartMyself() {
-	console.log("restartMyself");
-	const subprocess = spawn(configPathLocalFolder + "electron.exe", [''], {
+function runSetup() {
+	var directoryRemote = remotePath + "/setup.exe";
+	const subprocess = spawn(directoryRemote, [''], {
 		detached: true,
 		stdio: 'ignore'
 	});
 	subprocess.unref();
-	win.close();
+	setTimeout(function () { sendBack("fromMainUpdateProgress", "100") }, 200);
+}
+function update() {
+	runSetup();
+	// deleteMyself();
+}
+function restartMyself() {
+	console.log("restartMyself");
+	const subprocess = spawn(configPathLocalFolder + "/app-1.0.0/RepaDex.exe", [''], {
+		detached: true,
+		stdio: 'ignore'
+	});
+	subprocess.unref();
+	app.quit();
 }
 function startup() {
 	// console.log(electron.screen.getPrimaryDisplay());

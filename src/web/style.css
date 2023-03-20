@@ -240,6 +240,14 @@ h5 {
 	padding-left: 0px;
 }
 
+footer {
+	height: 30px;
+	line-height: initial;
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
 .footer {
 	position: absolute;
 	bottom: 0;
@@ -466,6 +474,7 @@ h5 {
 body {
 	-webkit-print-color-adjust: exact !important;
 	print-color-adjust: exact;
+	height: 100%;
 }
 
 .dateTimeForm {
@@ -796,11 +805,67 @@ body {
 	width: 1000px;
 }
 
+.settings-loaner {
+	position: relative;
+	height: 40px;
+	width: 1000px;
+}
+
+#accordionLoaners {
+	width: 100%;
+}
+
+.settings-history-who-started {
+	position: absolute;
+	left: 10px;
+	top: 6px;
+}
+
+.settings-history-ref {
+	position: absolute;
+	left: 100px;
+	top: 8px;
+}
+
+.settings-history-value-released {
+	position: absolute;
+	left: 200px;
+	top: 8px;
+}
+
+.settings-history-valueReceived {
+	position: absolute;
+	left: 300px;
+	top: 8px;
+}
+
+.settings-history-conditionReleased {
+	position: absolute;
+	left: 400px;
+	top: 8px;
+}
+
+.settings-history-conditionReceived {
+	position: absolute;
+	left: 575px;
+	top: 8px;
+}
+
+.settings-history-dateReleased {
+	position: absolute;
+	left: 725px;
+	top: 8px;
+}
+
+.settings-history-dateReceived {
+	position: absolute;
+	left: 850px;
+	top: 8px;
+}
 
 .settings-loaner-line {
 	position: relative;
 	height: 40px;
-	width: 1000px;
 }
 
 /* .panel {
