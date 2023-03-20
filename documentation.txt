@@ -166,3 +166,6 @@ ChangeLog:
 	moved to electron forge for packaging
 	make that if it does not have focus for 10 minutes, refresh, then loop
 	changed tab order in save work modal
+1.1.0a:
+	Nickname is one word
+	updated some colors

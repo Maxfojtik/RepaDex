@@ -17,6 +17,8 @@
 	--waitingOnDEPColorHover: #000000;
 	--finishedColor: #000000;
 	--finishedColorHover: #000000;
+	--defaultColor: #000000;
+	--defaultColorHover: #000000;
 	color-scheme: light;
 	--h5-color: #000;
 }
@@ -50,6 +52,13 @@ h5 {
 	float: top;
 }
 
+.border-dark {
+	border-color: #000000;
+}
+
+.default {
+	background-color: var(--defaultColor);
+}
 
 .datePickedRow {
 	background-color: var(--datePickedColor);

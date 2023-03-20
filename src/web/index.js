@@ -1,7 +1,7 @@
 var blockProgress = false;
 var stopShaking = false;
 var building = "";
-var version = "1.1.0";
+var version = "1.1.0a";
 var newVersion = "";
 var shownPanel = 0;//0 = main table, 1 = repairEdit, 2 = repairForm, 3 = loanerForm, 4 = repair warning, 5 = updating, -1 = settings
 var darkMode = true;
@@ -438,26 +438,29 @@ function loadConfiguration() {
 			}
 			var amountDim = -0.3;
 			if (darkMode) {
-				amountDimDarkMode = -0.7;
-				amountDim = -0.9;
-				$("body").get(0).style.setProperty("--datePickedColor", pSBC(amountDimDarkMode, config["pickedColor"]));
-				$("body").get(0).style.setProperty("--datePickedColorHover", pSBC(amountDim, config["pickedColor"]));
-				$("body").get(0).style.setProperty("--sentOutColor", pSBC(amountDimDarkMode, config["sentOutColor"]));
-				$("body").get(0).style.setProperty("--sentOutColorHover", pSBC(amountDim, config["sentOutColor"]));
-				$("body").get(0).style.setProperty("--diagColor", pSBC(amountDimDarkMode, config["diagColor"]));
-				$("body").get(0).style.setProperty("--diagColorHover", pSBC(amountDim, config["diagColor"]));
-				$("body").get(0).style.setProperty("--submittedClaimColor", pSBC(amountDimDarkMode, config["submittedClaimColor"]));
-				$("body").get(0).style.setProperty("--submittedClaimColorHover", pSBC(amountDim, config["submittedClaimColor"]));
-				$("body").get(0).style.setProperty("--submittedRFAColor", pSBC(amountDimDarkMode, config["submittedRFAColor"]));
-				$("body").get(0).style.setProperty("--submittedRFAColorHover", pSBC(amountDim, config["submittedRFAColor"]));
-				$("body").get(0).style.setProperty("--orderedPartsColor", pSBC(amountDimDarkMode, config["orderedPartsColor"]));
-				$("body").get(0).style.setProperty("--orderedPartsColorHover", pSBC(amountDim, config["orderedPartsColor"]));
-				$("body").get(0).style.setProperty("--partsArrivedColor", pSBC(amountDimDarkMode, config["partsArrivedColor"]));
-				$("body").get(0).style.setProperty("--partsArrivedColorHover", pSBC(amountDim, config["partsArrivedColor"]));
-				$("body").get(0).style.setProperty("--waitingOnDEPColor", pSBC(amountDimDarkMode, config["waitingForDEPColor"]));
-				$("body").get(0).style.setProperty("--waitingOnDEPColorHover", pSBC(amountDim, config["waitingForDEPColor"]));
-				$("body").get(0).style.setProperty("--finishedColor", pSBC(amountDimDarkMode, config["finishedColor"]));
-				$("body").get(0).style.setProperty("--finishedColorHover", pSBC(amountDim, config["finishedColor"]));
+				amountDimDarkMode = .75;
+				amountDim = .90;
+				var otherColor = "#222529";
+				$("body").get(0).style.setProperty("--defaultColor", pSBC(amountDimDarkMode, config["defaultColor"], otherColor));
+				$("body").get(0).style.setProperty("--defaultColorHover", pSBC(amountDim, config["defaultColor"], otherColor));
+				$("body").get(0).style.setProperty("--datePickedColor", pSBC(amountDimDarkMode, config["pickedColor"], otherColor));
+				$("body").get(0).style.setProperty("--datePickedColorHover", pSBC(amountDim, config["pickedColor"], otherColor));
+				$("body").get(0).style.setProperty("--sentOutColor", pSBC(amountDimDarkMode, config["sentOutColor"], otherColor));
+				$("body").get(0).style.setProperty("--sentOutColorHover", pSBC(amountDim, config["sentOutColor"], otherColor));
+				$("body").get(0).style.setProperty("--diagColor", pSBC(amountDimDarkMode, config["diagColor"], otherColor));
+				$("body").get(0).style.setProperty("--diagColorHover", pSBC(amountDim, config["diagColor"], otherColor));
+				$("body").get(0).style.setProperty("--submittedClaimColor", pSBC(amountDimDarkMode, config["submittedClaimColor"], otherColor));
+				$("body").get(0).style.setProperty("--submittedClaimColorHover", pSBC(amountDim, config["submittedClaimColor"], otherColor));
+				$("body").get(0).style.setProperty("--submittedRFAColor", pSBC(amountDimDarkMode, config["submittedRFAColor"], otherColor));
+				$("body").get(0).style.setProperty("--submittedRFAColorHover", pSBC(amountDim, config["submittedRFAColor"], otherColor));
+				$("body").get(0).style.setProperty("--orderedPartsColor", pSBC(amountDimDarkMode, config["orderedPartsColor"], otherColor));
+				$("body").get(0).style.setProperty("--orderedPartsColorHover", pSBC(amountDim, config["orderedPartsColor"], otherColor));
+				$("body").get(0).style.setProperty("--partsArrivedColor", pSBC(amountDimDarkMode, config["partsArrivedColor"], otherColor));
+				$("body").get(0).style.setProperty("--partsArrivedColorHover", pSBC(amountDim, config["partsArrivedColor"], otherColor));
+				$("body").get(0).style.setProperty("--waitingOnDEPColor", pSBC(amountDimDarkMode, config["waitingForDEPColor"], otherColor));
+				$("body").get(0).style.setProperty("--waitingOnDEPColorHover", pSBC(amountDim, config["waitingForDEPColor"], otherColor));
+				$("body").get(0).style.setProperty("--finishedColor", pSBC(amountDimDarkMode, config["finishedColor"], otherColor));
+				$("body").get(0).style.setProperty("--finishedColorHover", pSBC(amountDim, config["finishedColor"], otherColor));
 			}
 			else {
 				$("body").get(0).style.setProperty("--datePickedColor", config["pickedColor"]);
@@ -542,7 +545,7 @@ function loadConfiguration() {
 	window.api.send("toMain", "configPls");
 	if (darkMode) {
 		$("body").get(0).style.setProperty("color-scheme", "dark");
-		$("body").get(0).style.setProperty("--h5-color", "#ccc");
+		$("body").get(0).style.setProperty("--h5-color", "#ddd");
 		$("#dex").css("color", "#ccc");
 		oldColor = "#ccc";
 		$("#RepaPart").css("color", "#ccc");

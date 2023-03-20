@@ -189,14 +189,14 @@ function showRepairs(repairsIn, length) {
 			}*/
 			//repair["descriptors"] = makeDescriptors(repair);
 			//console.log(repair["descriptors"]);
-			var row = "<tr class=\"" + repair.color + " front-row\" onclick=\"clickRow(" + repair.refNum + ")\"><th scope=\"row\">" + repair.name + "</th>";
+			var row = "<tr class=\"" + repair.color + " front-row " + (darkMode ? "border-dark text-dark" : "") + "\" onclick=\"clickRow(" + repair.refNum + ")\"><th scope=\"row\">" + repair.name + "</th>";
 			row += "<td>" + repair.refNum + "</td>";
 			row += "<td>" + repair.make + " " + repair.model + "</td>";
 			row += "<td>" + repair.serial + "</td>";
 			var date = new Date(repair.startDate);
 			var dateText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
 			row += "<td>" + dateText + "</td>";
-			row += "<td>" + repair.status + "</td>";
+			row += "<td>" + repair.status + "</td></tr>";
 			$("#dtBody").append(row);
 			amount++;
 			if (topRepair == undefined) {
