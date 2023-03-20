@@ -438,8 +438,8 @@ function loadConfiguration() {
 			}
 			var amountDim = -0.3;
 			if (darkMode) {
-				amountDimDarkMode = .75;
-				amountDim = .90;
+				amountDimDarkMode = .5;
+				amountDim = .70;
 				var otherColor = "#222529";
 				$("body").get(0).style.setProperty("--defaultColor", pSBC(amountDimDarkMode, config["defaultColor"], otherColor));
 				$("body").get(0).style.setProperty("--defaultColorHover", pSBC(amountDim, config["defaultColor"], otherColor));
