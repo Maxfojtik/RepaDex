@@ -702,6 +702,7 @@ window.api.receive("fromMainLoanerSaved", (data) => {
 	doneLoadingSaving();
 	backendData = JSON.parse(data);
 	if (tryingToStartALoanerForm) {
+		unfreezeForm();
 		tryingToStartALoanerForm = false;
 		console.log("saved loaner");
 		$('#addLoanerModal').modal('hide');
@@ -761,7 +762,7 @@ function findAndFillLoanerForm(assetTag) {
 }
 
 function validateloanerDoneButton() {
-	var doneEnabled = $("#loanerAddSerialNumber").val() != "" && $("#loanerAddMake").val() != "" && $("#loanerAddModel").val() != "" && $("#loanerAddAccessories").val() != "";
+	var doneEnabled = $("#loanerAddSerialNumber").val() != "" && $("#loanerAddMake").val() != "" && $("#loanerAddModel").val() != "";
 	$("#loanerAddDoneButton").prop("disabled", !doneEnabled);
 }
 

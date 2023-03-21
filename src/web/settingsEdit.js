@@ -87,35 +87,9 @@ function setupSettingsLoaners() {
                 // </ul>
             }
         }
-
-
-        // "loanerTag2": {
-        //     "number": "loanerTag2",
-        //     "serial": "loanerSerial2",
-        //     "make": "Apple",
-        //     "model": "Macbook Pro",
-        //     "acc": "Charger, Bag",
-        //     "history": [
-        //         {
-        //             "whoStarted": "fojtik.6",
-        //             "refNum": "20556",
-        //             "valueReleased": "$123",
-        //             "conditionReleased": "Great.",
-        //             "dateReleased": "2023-03-03T15:54:00.000Z",
-        //             "conditionReceived": "Great.",
-        //             "valueReceived": "$123"
-        //         },
-        //         {
-        //             "whoStarted": "fojtik.6",
-        //             "refNum": "20556",
-        //             "valueReleased": "$123",
-        //             "conditionReleased": "Great.",
-        //             "dateReleased": "2023-03-03T19:09:00.000Z",
-        //             "conditionReceived": "Great.",
-        //             "valueReceived": "$123"
-        //         }
-        //     ]
-        // }
+        else {
+            accordionBodyText = "No History.";
+        }
 
         var accordionBodyEnd = "</div>";
         var accordionInsideEnd = "</div>";
@@ -168,6 +142,7 @@ function determineIfUsersChanged() {
         changed = changed || (employeeConfig["black-text"] ? true : false) != $("#settings-employee-" + smallEm + "-check-black").is(":checked");
     }
     if (changed) {
+        addingANewEmployee = false;
         changedSomething();
     }
     else {

@@ -14,10 +14,12 @@ var win;
 if (require('electron-squirrel-startup')) {
 	app.quit();//if this is first time running
 }
+var remotePath = "C:/Users/Maxwell/Documents/GitHub/Repadex";
 
-var remotePath = "K:/BF/PRSM/TechHub/RepaDex";
-// var remotePath = "C:/Users/Maxwell/Documents/GitHub/Repadex";
-var iPad = fs.existsSync("C:/IAmiPad");
+if (fs.existsSync("K:/")) {
+	remotePath = "K:/BF/PRSM/TechHub/RepaDex";
+}
+var iPad = false;//fs.existsSync("C:/IAmiPad");
 
 if (iPad) {
 	remotePath = remotePath.replace("K:/BF/PRSM", "K:");
