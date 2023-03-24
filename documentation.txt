@@ -174,3 +174,5 @@ ChangeLog:
 	fixed bug (cant go back if cancel adding) when you cancel adding a loaner
 	make it say if there is no history with the loaner
 	make it auto detect if there is a K drive, to use it
+1.1.0c:
+	bug fix loaner not attaching to repair

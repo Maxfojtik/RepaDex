@@ -709,7 +709,11 @@ window.api.receive("fromMainLoanerSaved", (data) => {
 		findAndFillLoanerForm(assetNumber);
 	}
 	else if (tryingToFinishALoanerForm) {
+		unfreezeForm();
 		console.log("saved checked out, attaching...");
+		if (!currentRepairJSON["loaner"]) {
+			currentRepairJSON["loaner"] = {};
+		}
 		currentRepairJSON["loaner"]["has"] = true;
 		currentRepairJSON["loaner"]["assetTag"] = assetNumber;
 		addedWorkRefNum = currentRepairJSON["refNum"];
