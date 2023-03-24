@@ -40,7 +40,10 @@ function saveNewUser() {
     var modal = bootstrap.Modal.getOrCreateInstance('#saveConfirmModal');
     modal.show();
 }
-
+function clickRefNum(refNum) {
+    refClicked = refNum;
+    clickRow(refNum);
+}
 function setupSettingsLoaners() {
     $("#accordionLoaners").empty();
     for (var tag in backendData["loaners"]) {
@@ -48,10 +51,10 @@ function setupSettingsLoaners() {
         var backgroundColor = "background: var(--bs-success-border-subtle);";
         var insideButton = loaner["make"] + " " + loaner["model"] + " : " + tag;
         if (loaner["checkOut"]) {
-            backgroundColor = "background: var(--bs-warning-border-subtle);";
+            backgroundColor = "background: " + (darkMode ? "#3f6893" : "var(--bs-warning-border-subtle)");
             var date = new Date(loaner["checkOut"]["dateReleased"]);
             var dateReleasedText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
-            insideButton += "<span style=\"padding-left: 100px;\">Ref Num: " + loaner["checkOut"]["refNum"] + ";  " + loaner["checkOut"]["whoStarted"] + " checked it out on " + dateReleasedText + " to " + backendData["repairs"][loaner["checkOut"]["refNum"]]["name"] + "</span>";
+            insideButton += "<span style=\"padding-left: 100px;\">Ref Num: <a href='javascript:void(0)' onclick='clickRefNum(" + loaner["checkOut"]["refNum"] + ")'>" + loaner["checkOut"]["refNum"] + "</a>;  " + loaner["checkOut"]["whoStarted"] + " checked it out on " + dateReleasedText + " to " + backendData["repairs"][loaner["checkOut"]["refNum"]]["name"] + "</span>";
         }
         var accordionItem = "<div class=\"accordion-item\" style=\"" + backgroundColor + "\">";
         var header = "<h2 class=\"accordion-header\" id=\"heading" + tag + "\">";

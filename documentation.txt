@@ -176,3 +176,7 @@ ChangeLog:
 	make it auto detect if there is a K drive, to use it
 1.1.0c:
 	bug fix loaner not attaching to repair
+1.1.0d:
+	added loaner to work log
+	changed copy functionality so that it does nothing until user asks it to
+	make it so you can click on the repair from the loaner screen

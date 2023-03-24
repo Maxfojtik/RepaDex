@@ -716,6 +716,13 @@ window.api.receive("fromMainLoanerSaved", (data) => {
 		}
 		currentRepairJSON["loaner"]["has"] = true;
 		currentRepairJSON["loaner"]["assetTag"] = assetNumber;
+
+
+		var logEntry = {};
+		logEntry["who"] = loanerCheckoutJSON["whoStarted"];
+		logEntry["when"] = loanerCheckoutJSON["dateReleased"];
+		logEntry["what"] = "Issued a loaner: " + assetNumber;
+		currentRepairJSON["logs"].push(logEntry);
 		addedWorkRefNum = currentRepairJSON["refNum"];
 		window.api.send("toMain", "s" + JSON.stringify(currentRepairJSON));
 		freezeForm();
@@ -724,6 +731,11 @@ window.api.receive("fromMainLoanerSaved", (data) => {
 	}
 	else if (checkingInLoaner) {
 		currentRepairJSON["loaner"]["has"] = false;
+		var logEntry = {};
+		logEntry["who"] = loggedInAs;
+		logEntry["when"] = new Date().toJSON();
+		logEntry["what"] = "Returned a loaner: " + currentRepairJSON["loaner"]["assetTag"];
+		currentRepairJSON["logs"].push(logEntry);
 		addedWorkRefNum = currentRepairJSON["refNum"];
 		window.api.send("toMain", "s" + JSON.stringify(currentRepairJSON));
 		freezeForm();
@@ -780,20 +792,6 @@ function issueLoaner() {
 		var modal = bootstrap.Modal.getInstance(loanerModalElement);
 		modal.hide();
 		findAndFillLoanerForm(value);
-		// currentRepairJSON["loaner"] = {};
-		// currentRepairJSON["loaner"]["has"] = true;
-		// currentRepairJSON["loaner"]["assetTag"] = value;
-
-		// var logEntry = JSON.parse("{}");
-		// logEntry["who"] = loggedInAs;
-		// logEntry["when"] = new Date().toJSON();
-		// logEntry["what"] = "Issued a loaner: " + value;
-		// currentRepairJSON["logs"].push(logEntry);
-
-		// freezeForm();
-		// startLoadingSaving("Saving loaner information...");
-		// addedWorkRefNum = refNumIn;
-		// window.api.send("toMain", "s" + JSON.stringify(currentRepairJSON));
 	}
 }
 function validateLoanerCheckIn() {

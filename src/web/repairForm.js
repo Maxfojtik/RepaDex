@@ -183,9 +183,20 @@ function warrantySelected() {
 	$("#warrantySelector").addClass("is-valid");
 	$("#warrantySelector").removeClass("is-invalid");
 }
-function loadCopy() {
+function loadCopySome() {
 	var refNum = $("#copyComputerSelector option:selected").val();
 	var repair = backendData["repairs"][refNum];
+	$("#nameForm").val(repair["name"]);
+	$("#emailForm").val(repair["email"]);
+	$("#phoneForm").val(repair["phone"]);
+	validateInputElement($("#nameForm")[0]);
+	validateEmail();
+	validateInputElement($("#phoneForm")[0]);
+}
+function loadCopyYes() {
+	var refNum = $("#copyComputerSelector option:selected").val();
+	var repair = backendData["repairs"][refNum];
+	loadCopySome();
 	//json["employee"] = selectedEmployee; taken care of in first work entry
 	//json["dotNumber"] = $("#dotForm").val();
 	//json["dateForm"] = $("#dateForm").val();
@@ -290,9 +301,9 @@ window.api.receive("fromMainLoadSearch", (data) => {
 		var nameN = email.replace("@osu.edu", "");
 		if (nameN == searchingNameN) {
 			foundComputer = true;
-			$("#nameForm").val(repair["name"]);
-			$("#emailForm").val(repair["email"]);
-			$("#phoneForm").val(repair["phone"]);
+			// $("#nameForm").val(repair["name"]);
+			// $("#emailForm").val(repair["email"]);
+			// $("#phoneForm").val(repair["phone"]);
 			repairsUnderThisName.push(repair);
 		}
 	}
@@ -830,6 +841,7 @@ function sendSave() {
 	var isFlagship = $("#flexSwitchCheckCheckedFlagship").is(":checked") && $("#flexSwitchCheckCheckedFlagship").is(":visible");
 	var isDepartmental = $("#flexSwitchCheckCheckedDepartmental").is(":checked") && $("#flexSwitchCheckCheckedDepartmental").is(":visible");
 	var intakeText = $("#intakeTextArea").val();
+	intakeText = intakeText.replace(/[^\w\s]/gi, '');//scrub special characters
 	var hasText = $("#intakeTextArea").val() != "";
 	intakeText += isFlagship ? (hasText ? ", " : "") + "Flagship Device" : "";
 	hasText = intakeText != "";
@@ -870,6 +882,7 @@ function jsonifyTheRepairForm() {
 	json["startDate"] = new Date($("#dateForm").val()).toJSON();
 	json["acc"] = $("#accForm").val();
 	json["intakeNotes"] = $("#intakeTextArea").val();
+	json["intakeNotes"] = json["intakeNotes"].replace(/[^\w\s]/gi, '');//scrub special characters
 	// console.log($("#intakeTextArea").val());
 	json["phone"] = $("#phoneForm").val();
 	json["purchaseDate"] = $("#purchForm").val();
@@ -884,6 +897,7 @@ function jsonifyTheRepairForm() {
 	var problem = $("#problemSelector").val();
 	if (problem == "Other" || problem == "Multiple") {
 		json["problem"] = $("#problemTextArea").val();
+		json["problem"] = json["problem"].replace(/[^\w\s]/gi, '');//scrub special characters
 	}
 	else {
 		json["problem"] = problem;

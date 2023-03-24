@@ -8,10 +8,10 @@ function resetLoanerForm() {
 	$("#loanerDeviceValue").val("");
 	$("#loanerConditionTextArea").val("");
 }
+var loanerCheckoutJSON = {};
 function saveLoaner() {
 	var assetTag = $("#loanerTagForm").val();
 	var loanerJSON = backendData["loaners"][assetTag];
-	var loanerCheckoutJSON = {};
 	loanerCheckoutJSON["whoStarted"] = selectedLoanerEmployee;
 	loanerCheckoutJSON["refNum"] = $("#loanerRefNum").val();
 	loanerCheckoutJSON["valueReleased"] = $("#loanerDeviceValue").val();

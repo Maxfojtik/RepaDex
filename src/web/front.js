@@ -27,6 +27,7 @@ function clickRow(number) {
 		startUpdate(number);
 		$("#mainTable").hide();
 		$("#repairContextButtons").hide();
+		$("#settingsEdit").hide();
 		$("#repairEdit").fadeIn();
 		shownPanel = 1;
 	}
