@@ -111,7 +111,7 @@ function makeLoanerFormPrintable() {
 	changeStyleOfProgram(true);
 	$("#mainTitle").css("font-size", "75px");
 	$("#techLogo").css("height", "80px");
-	$("#loanerDateFormPrint").val(new Date($("#dateForm").val()).toDateString());
+	$("#loanerDateFormPrint").val(new Date($("#loanerDateForm").val()).toDateString());
 	const d = new Date();
 	var dateTimeText = String(d.getMonth() + 1).padStart(2, '0') + "/" + String(d.getDate()).padStart(2, '0') + "/" + d.getFullYear();
 	var hours = d.getHours();

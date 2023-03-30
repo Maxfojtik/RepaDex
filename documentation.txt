@@ -180,3 +180,6 @@ ChangeLog:
 	added loaner to work log
 	changed copy functionality so that it does nothing until user asks it to
 	make it so you can click on the repair from the loaner screen
+1.1.0e:
+	fixed filtering
+	fixed invalid date in loaner form

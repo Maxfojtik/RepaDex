@@ -19,7 +19,9 @@ var refClicked = 0;
 var backendData;
 var freezeFront = false;
 function clickRow(number) {
-	filterPopover.hide();
+	if (filterPopover) {
+		filterPopover.toggle();
+	}
 	//console.log("row: "+number);
 	if (refClicked == number && !freezeFront) {
 		refClicked = 0;
@@ -451,89 +453,118 @@ function saveFilterDates() {
 	endedDateFilter = new Date($("#filterEndDate").val());
 	endedDateFilter.setDate(endedDateFilter.getDate() + 1);
 }
-
+function filterHideListener() {
+	console.log("dispose");
+	filterPopover.dispose();
+	filterPopover = null;
+}
 function initFilterPopover() {
-	var body = "<div id='filterOptions'>";
-	for (var i in possibleStatuses) {
-		if (possibleStatuses[i].includes("Date")) {
-			continue;
-		}
-		var checkID = possibleStatuses[i].replace(/\s/g, "").toLowerCase() + "filteroption";
-		idToStatus[checkID] = possibleStatuses[i];
-		var rawHTML = "<div class='form-check'><input class='form-check-input normalFilter' type='checkbox' value='' id='" + checkID + "' checked><label class='form-check-label' for='flexCheckDefault'>" + possibleStatuses[i] + "</label></div>";
-		//console.log(rawHTML);
-		body += rawHTML;
+	var buttonEl = document.getElementById('filterButton');
+	var popover = bootstrap.Popover.getInstance(buttonEl);
+	console.log(popover);
+	if (popover) {
+		console.log("hide");
+		popover.toggle();
 	}
-	idToStatus["datestartfilteroption"] = "Date Start";
-	idToStatus["dateendfilteroption"] = "Date End";
-	body += "<div class='form-check'><input class='form-check-input dateFilter' type='checkbox' value='' id='datestartfilteroption'>Started: <input class=\"\" style=\"margin-left: 18px; width: 130px;\" id=\"filterStartDate\" type=\"date\" value=\"\" onchange=\"saveFilterDates(); reDraw()\"></div>";
-	body += "<div class='form-check'><input class='form-check-input dateFilter' type='checkbox' value='' id='dateendfilteroption'>Picked Up: <input class=\"\" style=\"width: 130px;\" id=\"filterEndDate\" type=\"date\" value=\"\" onchange=\"saveFilterDates(); reDraw()\"></div>";
-	body += "</div>";
-	var exampleEl = document.getElementById('filterButton');
-	var options = { "content": body, "html": true, "sanitize": false };
-	filterPopover = new bootstrap.Popover(exampleEl, options);
+	else {
+		console.log("show");
+		var body = "<div id='filterOptions'>";
+		for (var i in possibleStatuses) {
+			if (possibleStatuses[i].includes("Date")) {
+				continue;
+			}
+			var checked = true;
+			var checkID = possibleStatuses[i].replace(/\s/g, "").toLowerCase() + "filteroption";
+			idToStatus[checkID] = possibleStatuses[i];
+			if (possibleStatuses[i] == "Default Selection" && Object.keys(changedStatuses).length > 0) {//if we are creating default and something is changed
+				checked = false;
+			}
+			if (changedStatuses[idToStatus[checkID]]) {//if we are creating not date and that thing is changed
+				checked = false;
+			}
+			var rawHTML = "<div class='form-check'><input class='form-check-input normalFilter' type='checkbox' value='' id='" + checkID + "' onchange='selectFilter($(\"#" + checkID + "\"))' " + (checked ? "checked" : "") + "><label class='form-check-label' for='flexCheckDefault'>" + possibleStatuses[i] + "</label></div>";
+			//console.log(rawHTML);
+			body += rawHTML;
+		}
+		idToStatus["datestartfilteroption"] = "Date Start";
+		idToStatus["dateendfilteroption"] = "Date End";
+		body += "<div class='form-check'><input class='form-check-input dateFilter' type='checkbox' value='' id='datestartfilteroption' onchange='selectFilter($(\"#datestartfilteroption\"))'" + (changedStatuses[idToStatus['datestartfilteroption']] ? "checked" : "") + " >Started: <input class=\"\" style=\"margin-left: 18px; width: 130px;\" id=\"filterStartDate\" type=\"date\" value=\"\" onchange=\"saveFilterDates(); reDraw()\"></div>";
+		body += "<div class='form-check'><input class='form-check-input dateFilter' type='checkbox' value='' id='dateendfilteroption' onchange='selectFilter($(\"#dateendfilteroption\"))'" + (changedStatuses[idToStatus['dateendfilteroption']] ? "checked" : "") + " >Picked Up: <input class=\"\" style=\"width: 130px;\" id=\"filterEndDate\" type=\"date\" value=\"\" onchange=\"saveFilterDates(); reDraw()\"></div>";
+		body += "</div>";
+		var options = { "content": body, "html": true, "sanitize": false };
+		filterPopover = new bootstrap.Popover(buttonEl, options);
+		filterPopover.show();
+		buttonEl.removeEventListener('hidden.bs.popover', filterHideListener);
+		buttonEl.addEventListener('hidden.bs.popover', filterHideListener);
+	}
+	// exampleEl.addEventListener('show.bs.popover', function () {
+	// 	console.log("show");
+	// 	var content = $(filterPopover._config.content);
+	// 	var children = content.find("");
+	// 	console.log(content);
+	// 	for (var i in possibleStatuses) {
+
+	// 	}
+	// 	filterPopover._config.content = content;
+	// })
+}
+function selectFilter(element) {
+	console.log(element.attr("id"));
+	if (element.attr("id") == "defaultselectionfilteroption") {
+		if (element.prop("checked")) {
+			changedStatuses = {};
+			$("#filterOptions .normalFilter").prop('checked', true);
+			$("#filterOptions .dateFilter").prop('checked', false);
+			$("#filterEndDate").val("");//clear the dates too
+			$("#filterStartDate").val("");
+			startedDateFilter = null;
+			endedDateFilter = null;
+		}
+		else {
+			for (k in idToStatus) {
+				if (idToStatus[k].includes("Date")) {//dont count date
+					continue;
+				}
+				else {
+					changedStatuses[idToStatus[k]] = true;
+				}
+			}
+			$("#filterOptions .normalFilter").prop('checked', false);
+			//console.log(hiddenStatuses);
+		}
+		reDraw();
+	}
+	else {
+		if (element.attr("id").includes("date")) {
+			console.log(element.attr("id"));
+			changedStatuses[idToStatus[element.attr("id")]] = element.prop("checked");
+			if (!element.prop("checked") && element.attr("id").includes("start")) {
+				$("#filterStartDate").val("");
+				startedDateFilter = null;
+			}
+			if (!element.prop("checked") && element.attr("id").includes("end")) {
+				$("#filterEndDate").val("");
+				endedDateFilter = null;
+			}
+		}
+		else {
+			changedStatuses[idToStatus[element.attr("id")]] = !element.prop("checked");
+		}
+		// console.log(checkedStatuses[idToStatus[this.id]]);
+		var anyChanged = false;
+		for (var k in changedStatuses) {
+			if (changedStatuses[k]) {
+				anyChanged = true;
+				break;
+			}
+		}
+		$("#defaultselectionfilteroption").prop('checked', !anyChanged);
+		reDraw();
+	}
+
 }
 function openFilter() {
-	filterPopover.toggle();
-	for (var i in possibleStatuses)//add jQuery to the stuffs
-	{
-		var checkID = possibleStatuses[i].replace(/\s/g, "").toLowerCase() + "filteroption";
-		// console.log(checkID);
-		$("#" + checkID).off('change');//remove all current change listeners
-		$("#" + checkID).on("change", function () {
-			//console.log(this.id);
-			if (this.id == "defaultselectionfilteroption") {
-				if (this.checked) {
-					changedStatuses = {};
-					$("#filterOptions .normalFilter").prop('checked', true);
-					$("#filterOptions .dateFilter").prop('checked', false);
-					$("#filterEndDate").val("");//clear the dates too
-					$("#filterStartDate").val("");
-					startedDateFilter = null;
-					endedDateFilter = null;
-				}
-				else {
-					for (k in idToStatus) {
-						if (idToStatus[k].includes("Date")) {//dont count date
-							continue;
-						}
-						else {
-							changedStatuses[idToStatus[k]] = true;
-						}
-					}
-					$("#filterOptions .normalFilter").prop('checked', false);
-					//console.log(hiddenStatuses);
-				}
-				reDraw();
-			}
-			else {
-				if (this.id.includes("date")) {
-					changedStatuses[idToStatus[this.id]] = this.checked;
-					if (!this.checked && this.id.includes("start")) {
-						$("#filterStartDate").val("");
-						startedDateFilter = null;
-					}
-					if (!this.checked && this.id.includes("end")) {
-						$("#filterEndDate").val("");
-						endedDateFilter = null;
-					}
-				}
-				else {
-					changedStatuses[idToStatus[this.id]] = !this.checked;
-				}
-				// console.log(checkedStatuses[idToStatus[this.id]]);
-				var anyChanged = false;
-				for (var k in changedStatuses) {
-					if (changedStatuses[k]) {
-						anyChanged = true;
-						break;
-					}
-				}
-				$("#defaultselectionfilteroption").prop('checked', !anyChanged);
-				reDraw();
-			}
-		});
-	}
+	initFilterPopover();
 }
 // function filterTable()
 // {

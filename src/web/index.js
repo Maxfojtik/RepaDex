@@ -1,7 +1,7 @@
 var blockProgress = false;
 var stopShaking = false;
 var building = "";
-var version = "1.1.0d";
+var version = "1.1.0e";
 var newVersion = "";
 var shownPanel = 0;//0 = main table, 1 = repairEdit, 2 = repairForm, 3 = loanerForm, 4 = repair warning, 5 = updating, -1 = settings
 var darkMode = true;
@@ -47,7 +47,6 @@ $(document).ready(function () {
 	$('#iPadSN').on('keyup', upperSerial);
 	addWorkToast = new bootstrap.Toast($('#addWorkToast'));
 	emButtonModal = new bootstrap.Modal($('#emButtonModal'));
-	initFilterPopover();
 	$(".maximize").click(function (e) { window.api.send("toMain", "actionMaximize"); });
 	$(".minimize").click(function (e) { window.api.send("toMain", "actionMinimize"); });
 	$(".restore").click(function (e) { window.api.send("toMain", "actionRestore"); });
