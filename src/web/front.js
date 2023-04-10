@@ -108,7 +108,10 @@ function loadAll() {
 function createNewRepair() {
 	$("#mainTable").hide();
 	$("#repairForm").fadeIn();
-	filterPopover.hide();
+	if (filterPopover) {
+		filterPopover.toggle();
+	}
+	// filterPopover.hide();
 	logOut();
 	resetRepairForm();
 	resetVersionStyling();

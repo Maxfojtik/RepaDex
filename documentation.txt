@@ -183,3 +183,5 @@ ChangeLog:
 1.1.0e:
 	fixed filtering
 	fixed invalid date in loaner form
+1.1.0f:
+	fixed another filterpopover bug
