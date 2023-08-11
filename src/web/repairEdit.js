@@ -12,6 +12,9 @@ var attachModal;
 document.addEventListener('drop', (event) => {
 	// console.log("drop");
 	// console.log(event);
+	if (event.dataTransfer.files.length == 0) {
+		return;
+	}
 	console.log(event.dataTransfer.files);
 	event.preventDefault();
 	event.stopPropagation();
@@ -92,7 +95,26 @@ $(document).on("keyup", '#assetTagForm', function (e) {
 		issueLoaner();
 	}
 });
+function validateNote() {
+	if ($("#noteTextInput").val() != "") {
+		if (!repairEditFrozen) {
+			$(".editWorkButtons").prop('disabled', false);
+		}
+		$("#noteTextInput").removeClass("is-invalid");
+		$("#noteTextInput").addClass("is-valid");
+	}
+	else if ($("#noteTextInput").val() == "") {
+		if (!repairEditFrozen) {
+			$(".editWorkButtons").prop('disabled', true);
+		}
+		$("#noteTextInput").addClass("is-invalid");
+		$("#noteTextInput").removeClass("is-valid");
+	}
+}
 $(document).on("keyup", '#noteTextInput', function (e) {
+	if ($('#addWorkSelector').val() == "Waiting on DEP") {
+		validateNote();
+	}
 	if (e.keyCode == 13 && !$("#saveWorkButton").is(":disabled")) {
 		saveWork();
 	}
@@ -101,6 +123,20 @@ $(document).ready(function () {
 	$('#loginToast').on('hidden.bs.toast', function () {
 		if (loginToast) {
 			loginToast.dispose();
+		}
+	});
+	$('#addWorkSelector').on('change', function () {
+		if (this.value == "Waiting on DEP") {
+			$("#noteTextInput").prop("placeholder", "new serial (required)");
+			validateNote();
+		}
+		else {
+			$("#noteTextInput").prop("placeholder", "notes (optional)");
+			$("#noteTextInput").removeClass("is-invalid");
+			$("#noteTextInput").removeClass("is-valid");
+			if (!repairEditFrozen) {
+				$(".editWorkButtons").prop('disabled', false);
+			}
 		}
 	});
 });
@@ -221,6 +257,10 @@ function selectRepairPill(name) {
 	saveWorkAs(name);
 }
 function saveWorkAs(name) {
+	if ($("#addWorkSelector").val() == "Sent Quote") {
+		$("#addWorkSelector").val("Note");
+		$("#noteTextInput").val("\'Sent Quote\'");
+	}
 	var date = $("#addWorkDate").val();
 	var repairWork = JSON.parse("{}");
 	repairWork["who"] = name;
@@ -283,6 +323,8 @@ function resetAddWork() {
 	$("#noteTextInput").val("");
 	$("#addWorkSelector").val("Submitted Claim");
 	$("#deleteButtonCol").hide();
+	$("#noteTextInput").prop("placeholder", "notes (optional)");
+	$("#noteTextInput").removeClass("is-invalid");
 }
 function addWork() {
 	resetAddWork();
@@ -598,6 +640,11 @@ function showRepair(data, refNum) {
 			path = path.replaceAll("\\", "/");
 			var name = path.split("/").pop();
 			var link = "<a href=\"javascript:void(0)\" onclick='window.api.send(\"toMain\", \"open" + path + "\");'>" + name + "</a>";
+			html += "<td style='max-width: 400px; overflow:auto;'>" + link + "</td>";
+		}
+		else if (repair["workCompleted"][i]["what"] == "Waiting on DEP") {
+			var name = repair["workCompleted"][i]['note'];
+			var link = "<a href=\"javascript:void(0)\" class='copiable' data-text='" + repair["workCompleted"][i]['note'] + "'>" + name + "</a>";
 			html += "<td style='max-width: 400px; overflow:auto;'>" + link + "</td>";
 		}
 		else {

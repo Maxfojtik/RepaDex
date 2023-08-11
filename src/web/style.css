@@ -252,7 +252,7 @@ h5 {
 footer {
 	height: 30px;
 	line-height: initial;
-	position: absolute;
+	position: fixed;
 	right: 10px;
 	bottom: 10px;
 }

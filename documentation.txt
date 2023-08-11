@@ -185,3 +185,8 @@ ChangeLog:
 	fixed invalid date in loaner form
 1.1.0f:
 	fixed another filterpopover bug
+1.1.1:
+	fixed version popover error
+	added an option for Sent Quote
+	make awaiting DEP require a serial number
+	make logged in as not scroll
