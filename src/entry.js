@@ -296,6 +296,10 @@ function cancelError() {
 		errorWin.close();
 	}
 }
+var cancelTimer;
+function cancelStartupAndClose() {
+	process.exit(1);
+}
 function copyConfigAndStart() {
 	if (!win) {
 		createWindow();//create the window
@@ -315,8 +319,12 @@ function copyConfigAndStart() {
 			lockedPath = lockedPath.replace("K:/BF/PRSM", "K:");
 			versionFile = versionFile.replace("K:/BF/PRSM", "K:");
 		}
+		// console.log("clear");
+		clearTimeout(cancelTimer);
 		startup();
 	});
+	// console.log("set");
+	cancelTimer = setTimeout(cancelStartupAndClose, 60000);
 }
 app.whenReady().then(() => {
 	copyConfigAndStart();

@@ -64,7 +64,9 @@ function resetVersionStyling() {
 }
 var versionPopover;
 function versionUnhover() {
-	versionPopover.hide();
+	if (versionPopover) {
+		versionPopover.hide();
+	}
 	//console.log("hidden");
 }
 function versionHover() {
