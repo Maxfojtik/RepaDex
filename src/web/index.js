@@ -1,7 +1,7 @@
 var blockProgress = false;
 var stopShaking = false;
 var building = "";
-var version = "1.1.1";
+var version = "1.1.1a";
 var newVersion = "";
 var shownPanel = 0;//0 = main table, 1 = repairEdit, 2 = repairForm, 3 = loanerForm, 4 = repair warning, 5 = updating, -1 = settings
 var darkMode = true;
@@ -102,6 +102,14 @@ window.api.receive("fromMainAction", (data) => {
 	else if (data == "unmaximize") {
 		$(".maximize").show();
 		$(".restore").hide();
+	}
+	else if (data == "focus") {
+		// $(".focusIndicator").css("width", "100%");
+		$(".focusIndicator").css("height", "20px");
+	}
+	else if (data == "blur") {
+		// $(".focusIndicator").css("width", "0%");
+		$(".focusIndicator").css("height", "0px");
 	}
 });
 window.api.receive("fromMainUpdateProgress", (data) => {

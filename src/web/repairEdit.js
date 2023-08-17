@@ -325,6 +325,7 @@ function resetAddWork() {
 	$("#deleteButtonCol").hide();
 	$("#noteTextInput").prop("placeholder", "notes (optional)");
 	$("#noteTextInput").removeClass("is-invalid");
+	$("#noteTextInput").removeClass("is-valid");
 }
 function addWork() {
 	resetAddWork();

@@ -463,6 +463,13 @@ function createWindow() {
 	win.on('minimize', () => {
 		sendBack("fromMainAction", "minimize");
 	});
+	win.on('focus', () => {
+		sendBack("fromMainAction", "focus");
+	});
+
+	app.on('browser-window-blur', () => {
+		sendBack("fromMainAction", "blur");
+	});
 	win.webContents.on('context-menu', (event, params) => {
 		//console.log(params);
 		const menu = new Menu();

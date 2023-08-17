@@ -190,3 +190,6 @@ ChangeLog:
 	added an option for Sent Quote
 	make awaiting DEP require a serial number
 	make logged in as not scroll
+1.1.1a:
+	added a gradiant at top
+	fixed a bug where notes dont get reset
