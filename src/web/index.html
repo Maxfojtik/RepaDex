@@ -102,6 +102,10 @@
 			<div class="row">
 				<img src="cloud-slash.svg" width="100" height="100"></img>
 				<h1>Can't connect to K drive</h1>
+				<br>
+				<br>
+				<br>
+				<h5 id="disconnectedMessageSub"></h5>
 			</div>
 		</div>
 		<div id="updatingMessage" style="display:none;" class="center-screen">
@@ -1210,6 +1214,13 @@
 									<span class="input-group-text">Value Received</span>
 									<input id="loanerCheckInValue" type="text" class="form-control" placeholder=""
 										oninput="loanerValueInput('loanerCheckInValue'); validateLoanerCheckIn()">
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-group mb-3 col">
+									<span class="input-group-text">Date Received</span>
+									<input class="datePickedUpLoaner" id="loanerDateReceived" type="datetime-local"
+										value="">
 								</div>
 							</div>
 							<button id="loanerCheckInDoneButton" class="btn btn-primary" type="button"

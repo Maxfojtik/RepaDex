@@ -854,7 +854,7 @@ function finishCheckIn() {
 	}
 	loanerJSON["checkOut"]["conditionReceived"] = $("#loanerCheckInCondition").val();
 	loanerJSON["checkOut"]["valueReceived"] = $("#loanerCheckInValue").val();
-	loanerJSON["checkOut"]["dateReceived"] = new Date($("#loanerDateForm").val()).toJSON();
+	loanerJSON["checkOut"]["dateReceived"] = new Date($("#loanerDateReceived").val()).toJSON();
 	loanerJSON["history"].push(loanerJSON["checkOut"]);
 	delete loanerJSON["checkOut"];
 	checkingInLoaner = true;
@@ -876,21 +876,12 @@ function checkInLoaner() {
 		$("#loanerCheckInCondition").val(loanerJSON["checkOut"]["conditionReleased"]);
 		$("#loanerCheckInValue").val(loanerJSON["checkOut"]["valueReleased"]);
 		$("#loanerCheckInTitle").text("Checking in loaner: " + loanerTag);
+		var date = new Date();
+		date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+		$("#loanerDateReceived").val(date.toISOString().slice(0, 16));
 		var modal = bootstrap.Modal.getOrCreateInstance('#loanerCheckInModal');
 		modal.show();
 		$("#loanerCheckInDoneButton").prop("disabled", true);
-		// currentRepairJSON["loaner"]["has"] = false;
-
-		// var logEntry = JSON.parse("{}");
-		// logEntry["who"] = loggedInAs;
-		// logEntry["when"] = new Date().toJSON();
-		// logEntry["what"] = "Checked loaner in";
-		// currentRepairJSON["logs"].push(logEntry);
-
-		// freezeForm();
-		// startLoadingSaving("Checking in loaner...");
-		// addedWorkRefNum = refNumIn;
-		// window.api.send("toMain", "s" + JSON.stringify(currentRepairJSON));
 	}
 }
 function figureOutColorAndStatus() {

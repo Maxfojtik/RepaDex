@@ -73,7 +73,7 @@ function setupSettingsLoaners() {
                 date = new Date(historyEntry["dateReceived"]);
                 var dateReceText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
                 innerAccord += "<div class=\"settings-history-who-started\">" + getPill(config.employees[historyEntry["whoStarted"]]["name"], historyEntry["whoStarted"], "", "") + "</div>";
-                innerAccord += "<div class=\"settings-history-ref\">" + historyEntry["refNum"] + "</div>";
+                innerAccord += "<div class=\"settings-history-ref\"><a href='javascript:void(0)' onclick='clickRefNum(" + historyEntry["refNum"] + ")'>" + historyEntry["refNum"] + "</a></div>";
                 innerAccord += "<div class=\"settings-history-value-released\">" + historyEntry["valueReleased"] + "</div>";
                 innerAccord += "<div class=\"settings-history-valueReceived\">" + historyEntry["valueReceived"] + "</div>";
                 innerAccord += "<div class=\"settings-history-conditionReleased\">" + historyEntry["conditionReleased"] + "</div>";

@@ -14,7 +14,7 @@ var win;
 if (require('electron-squirrel-startup')) {
 	app.quit();//if this is first time running
 }
-var remotePath = "C:/Users/Maxwell/Documents/GitHub/Repadex";
+var remotePath = "C:/Users/Maxwell/Documents/GitHub/Repadexs";
 
 if (fs.existsSync("K:/")) {
 	remotePath = "K:/BF/PRSM/TechHub/RepaDex";
@@ -306,7 +306,7 @@ function copyConfigAndStart() {
 	}
 	fs.copyFile(configPath, configPathLocal, (err) => {
 		if (err) {
-			displayError(); return;
+			displayError(err + " : " + (Date.now())); return;
 		}//throw err};
 		cancelError();
 		// console.log('File was copied to destination');
@@ -386,14 +386,10 @@ ipcMain.on("toMain", (event, args) => {
 		else if (args == "loadAll") {
 			loadMessageName = "fromMainLoadAll";
 			loadRepairs();
-			//var txt = fs.readFileSync(backendPath, 'utf8');
-			//jsonData = JSON.parse(txt);
 		}
 		else if (args == "loadForSearch") {
 			loadMessageName = "fromMainLoadSearch";
 			loadRepairs();
-			//var txt = fs.readFileSync(backendPath, 'utf8');
-			//jsonData = JSON.parse(txt);
 		}
 		else if (args == "updateRepairs") {
 			loadMessageName = "fromMainUpdateRepairs";
@@ -504,47 +500,6 @@ function createWindow() {
 	else {
 		win.loadFile('src/web/index.html');
 	}
-}
-var totalFilesToDelete = 0;
-var filesDeleted = 0;
-// function deleteMyself() {
-// 	console.log("deleteMyself");
-// 	var directory = configPathLocalFolder + "/resources/app";
-// 	fs.readdir(directory, (err, files) => {
-// 		if (err) throw err;
-// 		totalFilesToDelete = files.length;
-// 		filesDeleted = 0;
-// 		for (const file of files) {
-// 			fs.unlink(path.join(directory, file), err => {
-// 				if (err) throw err;
-// 				filesDeleted++;
-// 				sendBack("fromMainUpdateProgress", ((filesDeleted / totalFilesToDelete) / 2 * 100) + "");
-// 				if (filesDeleted == totalFilesToDelete) {
-// 					copyANewVersion();
-// 				}
-// 			});
-// 		}
-// 	});
-// }
-function copyANewVersion() {
-	console.log("copyANewVersion");
-	var directoryRemote = remotePath + "/repadex/resources/app";
-	var directoryLocal = configPathLocalFolder + "/resources/app";
-	fs.readdir(directoryRemote, (err, files) => {
-		if (err) throw err;
-		totalFilesToCopy = files.length;
-		filesCopied = 0;
-		for (const file of files) {
-			fs.copyFile(path.join(directoryRemote, file), path.join(directoryLocal, file), err => {
-				if (err) throw err;
-				filesCopied++;
-				sendBack("fromMainUpdateProgress", ((filesCopied / totalFilesToCopy) / 2 * 100 + 50) + "");
-				if (filesCopied == totalFilesToCopy) {
-					restartMyself();
-				}
-			});
-		}
-	});
 }
 function runSetup() {
 	var directoryRemote = remotePath + "/setup.exe";

@@ -657,6 +657,13 @@ body {
 	margin-left: 0px !important;
 }
 
+.datePickedUpLoaner {
+	width: 335px;
+	border-width: 1px;
+	padding-left: 10px;
+	margin-left: 0px !important;
+}
+
 .versionClickable {
 	cursor: pointer;
 }
