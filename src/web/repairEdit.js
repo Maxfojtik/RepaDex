@@ -645,7 +645,7 @@ function showRepair(data, refNum) {
 		}
 		else if (repair["workCompleted"][i]["what"] == "Waiting on DEP") {
 			var name = repair["workCompleted"][i]['note'];
-			var link = "<a href=\"javascript:void(0)\" class='copiable' data-text='" + repair["workCompleted"][i]['note'] + "'>" + name + "</a>";
+			var link = "<text class='copiable blue-text' data-text='" + repair["workCompleted"][i]['note'] + "'>" + name + "</text>";
 			html += "<td style='max-width: 400px; overflow:auto;'>" + link + "</td>";
 		}
 		else {

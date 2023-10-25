@@ -571,6 +571,12 @@ body {
 	cursor: help;
 }
 
+.sorting-form {
+	margin-left: 205px;
+	margin-right: 0px;
+	display: inline-flex;
+}
+
 .label-light {
 	color: #ccc
 }
@@ -662,6 +668,36 @@ body {
 	border-width: 1px;
 	padding-left: 10px;
 	margin-left: 0px !important;
+}
+
+.repairReportOption {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+#timeRangeLabel {
+	margin-top: 10px;
+}
+
+#reportEnd {
+	margin-bottom: 10px;
+}
+
+
+#lastWeekButton {
+	margin-top: -3px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+#thisWeekButton {
+	margin-top: -3px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.blue-text {
+	color: #0d6efd;
 }
 
 .versionClickable {

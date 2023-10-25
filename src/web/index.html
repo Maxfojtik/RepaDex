@@ -9,6 +9,9 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
 		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+	<script src="WorkSans-Bold-normal.js" type="module"></script>
+	<script src="WorkSans-Medium-normal.js" type="module"></script>
 	<link href="style.css" rel="stylesheet">
 	<script src="index.js"></script>
 	<script src="front.js"></script>
@@ -16,6 +19,7 @@
 	<script src="repairEdit.js"></script>
 	<script src="loanerForm.js"></script>
 	<script src="settingsEdit.js"></script>
+	<script src="reportGenerator.js"></script>
 	<title>RepaDex</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -795,12 +799,149 @@
 						<div class="tab-pane fade settings-loaner" id="v-pills-loaners" role="tabpanel"
 							aria-labelledby="v-pills-loaners-tab" tabindex="0" id="loanerSettingsPanel">
 							<div class="accordion" id="accordionLoaners">
-
 							</div>
 						</div>
 						<div class="tab-pane fade" id="v-pills-database" role="tabpanel"
 							aria-labelledby="v-pills-database-tab" tabindex="0">
-							WIP
+							<h4> Generate Report </h4>
+							<br>
+							<h5>Type</h5>
+							<select id="generateReportSelector" class="form-select header-inline"
+								aria-label="Select report" onclick="updateRepairGeneratorOptions()">
+								<option value="repairs" selected>Repairs Report</option>
+								<option value="user">User Report</option>
+								<option value="customer">Customer Report</option>
+								<option value="repair">Repair Report</option>
+							</select>
+
+
+							<div id="repairsReportGeneratorOptions" class="reportGeneratorOption">
+								<h5 id="timeRangeLabel">Time range</h5>
+								<input id="reportStart" type="datetime-local" value="" style="width: 190px;">
+								<text>-</text>
+								<input id="reportEnd" type="datetime-local" value="" style="width: 190px;">
+								<button id="lastWeekButton" type="button" class="btn btn-primary"
+									onclick="setReportLastWeek()">Last Week
+								</button>
+								<button id="thisWeekButton" type="button" class="btn btn-primary"
+									onclick="setReportThisWeek()">This Week
+								</button>
+								<h5>Sorting order</h5>
+								<select id="generatorRepairsSortBy" class="form-select">
+									<option value="large">Largest at top</option>
+									<option value="small">Smallest at top</option>
+								</select>
+								<div id="reportGeneratorSortBy">
+									<h5 style="display:inline-flex; margin-top:10px">Sort By:</h5>
+									<div class="form-check form-check-inline sorting-form"
+										style="margin-left: 130px; margin-bottom: 10px;">
+										<input class="form-check-input" type="radio" name="inlineRadioOptions"
+											id="sortingRadio1" value="generatorRepairs1Option" checked>
+									</div>
+									<div class="form-check form-check-inline sorting-form">
+										<input class="form-check-input" type="radio" name="inlineRadioOptions"
+											id="sortingRadio2" value="generatorRepairs2Option">
+									</div>
+									<div class="form-check form-check-inline sorting-form">
+										<input class="form-check-input" type="radio" name="inlineRadioOptions"
+											id="sortingRadio3" value="generatorRepairs3Option">
+									</div>
+									<div class="form-check form-check-inline sorting-form">
+										<input class="form-check-input" type="radio" name="inlineRadioOptions"
+											id="sortingRadio4" value="generatorRepairs4Option">
+									</div>
+									<div class="form-check form-check-inline sorting-form">
+										<input class="form-check-input" type="radio" name="inlineRadioOptions"
+											id="sortingRadio5" value="generatorRepairs5Option">
+									</div>
+								</div>
+								<!-- make model quantity always -->
+								<div class="header-inline" style="display: flex; padding:0px">
+									<select id="generatorRepairs1Option" class="form-select repairReportOption"
+										style="margin-left: 0px;" disabled>
+										<option value="quantity" selected>Quantity</option>
+										<option value="turnAround">Average turn around time</option>
+										<option value="medianTurnAround">Median turn around time</option>
+										<option value="maxTurnAround">Max turn around time</option>
+										<option value="workLines">Amount of work lines</option>
+										<option value="progressWait">Diagnose Time</option>
+										<option value="unfinished">Unfinished Number</option>
+										<option value="finished">Finished Number</option>
+										<option value="none">None</option>
+									</select>
+									<select id="generatorRepairs2Option" class="form-select repairReportOption">
+										<option value="turnAround">Average turn around time</option>
+										<option value="medianTurnAround">Median turn around time</option>
+										<option value="maxTurnAround">Max turn around time</option>
+										<option value="workLines">Amount of work lines</option>
+										<option value="progressWait">Diagnose Time</option>
+										<option value="unfinished">Unfinished Number</option>
+										<option value="finished">Finished Number</option>
+										<option value="none" selected>None</option>
+									</select>
+									<select id="generatorRepairs3Option" class="form-select repairReportOption">
+										<option value="turnAround">Average turn around time</option>
+										<option value="medianTurnAround">Median turn around time</option>
+										<option value="maxTurnAround">Max turn around time</option>
+										<option value="workLines">Amount of work lines</option>
+										<option value="progressWait">Diagnose Time</option>
+										<option value="unfinished">Unfinished Number</option>
+										<option value="finished">Finished Number</option>
+										<option value="none" selected>None</option>
+									</select>
+									<select id="generatorRepairs4Option" class="form-select repairReportOption">
+										<option value="turnAround">Average turn around time</option>
+										<option value="medianTurnAround">Median turn around time</option>
+										<option value="maxTurnAround">Max turn around time</option>
+										<option value="workLines">Amount of work lines</option>
+										<option value="progressWait">Diagnose Time</option>
+										<option value="unfinished">Unfinished Number</option>
+										<option value="finished">Finished Number</option>
+										<option value="none" selected>None</option>
+									</select>
+									<select id="generatorRepairs5Option" class="form-select repairReportOption"
+										style="margin-right: 0px;">
+										<option value="turnAround">Average turn around time</option>
+										<option value="medianTurnAround">Median turn around time</option>
+										<option value="maxTurnAround">Max turn around time</option>
+										<option value="workLines">Amount of work lines</option>
+										<option value="progressWait">Diagnose Time</option>
+										<option value="unfinished">Unfinished Number</option>
+										<option value="finished">Finished Number</option>
+										<option value="none" selected>None</option>
+									</select>
+								</div>
+								<h5 style="display:inline-flex; margin-top:10px">Only/Exclude Customers</h5>
+								<div class="input-group mb-3">
+									<button class="btn btn-outline-primary dropdown-toggle" type="button"
+										data-bs-toggle="dropdown" aria-expanded="false"
+										id="generatorRepairsList">Exclude</button>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="#" onclick="generateRepairInclude()">Only</a>
+										</li>
+										<li><a class="dropdown-item" href="#"
+												onclick="generateRepairExclude()">Exclude</a></li>
+									</ul>
+									<input id="repairReportGeneratorCustomers" type="text" class="form-control"
+										placeholder="buckeye.1, buckeye.2" value="hollberry.1">
+								</div>
+							</div>
+							<div id="userReportGeneratorOptions" class="reportGeneratorOption" style="display:none;">
+								user
+							</div>
+							<div id="customerReportGeneratorOptions" class="reportGeneratorOption"
+								style="display:none;">
+								customer
+							</div>
+							<div id="repairReportGeneratorOptions" class="reportGeneratorOption" style="display:none;">
+								repair
+							</div>
+
+
+							<br>
+
+							<button type="button" class="btn btn-primary" onclick="generateReport()">Generate report
+							</button>
 						</div>
 					</div>
 				</div>
@@ -1463,8 +1604,8 @@
 									onclick='window.api.send("toMain", "openK:/BF/PRSM/TechHub/RepaDex/configuration.json");'>Open
 									Configuration</a></h4>
 							<h4 style="padding-left: 50px;"><a href="javascript:void(0)"
-									onclick='exportDatabase()'>Export
-									Database</a></h4>
+									onclick='exportDatabase()'>Export Database to CSV file</a>
+							</h4>
 						</div>
 						<div class="settings-gear">
 							<img id="settings-gear" src="gear-fill.svg" height="30px"

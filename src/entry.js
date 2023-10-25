@@ -273,43 +273,23 @@ function incRefNum() {
 var errorWin;
 function displayError(errorText) {
 	sendBack("fromMainDisconnected", errorText);
-	// if (!errorWin) {
-	// 	errorWin = new BrowserWindow(
-	// 		{
-	// 			minWidth: 1220,
-	// 			width: 1600,
-	// 			height: 900,
-	// 			autoHideMenuBar: true,
-	// 			icon: __dirname + '/RepaDexFin.ico',
-	// 			webPreferences: {
-	// 				nodeIntegration: false, // is default value after Electron v5
-	// 				contextIsolation: true, // protect against prototype pollution
-	// 				enableRemoteModule: false, // turn off remote
-	// 			}
-	// 		});
-	// 	errorWin.loadFile("error.html");
-	// }
-	setTimeout(copyConfigAndStart, 1000);
 }
 function cancelError() {
 	if (errorWin) {
 		errorWin.close();
 	}
 }
-var cancelTimer;
-function cancelStartupAndClose() {
-	process.exit(1);
-}
+var cancelTimer = false;
 function copyConfigAndStart() {
 	if (!win) {
 		createWindow();//create the window
 	}
 	fs.copyFile(configPath, configPathLocal, (err) => {
 		if (err) {
-			displayError(err + " : " + (Date.now())); return;
+			displayError(err + " : " + (Date.now()));
+			return;
 		}//throw err};
 		cancelError();
-		// console.log('File was copied to destination');
 		var txt = fs.readFileSync(configPathLocal, 'utf8');
 		backendPath = JSON.parse(txt).backendPath;
 		lockedPath = JSON.parse(txt).lockFilePath;
@@ -319,12 +299,8 @@ function copyConfigAndStart() {
 			lockedPath = lockedPath.replace("K:/BF/PRSM", "K:");
 			versionFile = versionFile.replace("K:/BF/PRSM", "K:");
 		}
-		// console.log("clear");
-		clearTimeout(cancelTimer);
 		startup();
 	});
-	// console.log("set");
-	cancelTimer = setTimeout(cancelStartupAndClose, 60000);
 }
 app.whenReady().then(() => {
 	copyConfigAndStart();
