@@ -554,6 +554,18 @@ function saveEditRepair() {
 	startLoadingSaving("Saving edits to repair...");
 	freezeForm();
 }
+
+function openGSX() {
+	if (currentRepairJSON["gsxid"]) {
+		var link = "https://gsx2.apple.com/repairs/" + currentRepairJSON["gsxid"];
+		window.api.send("toMain", "open" + link);
+	}
+	else {
+		var link = "https://gsx2.apple.com/product-details/" + currentRepairJSON["serial"];
+		window.api.send("toMain", "open" + link);
+	}
+}
+
 function showRepair(data, refNum) {
 	unfreezeForm();
 	if (loggedInAs != "") {
@@ -598,17 +610,23 @@ function showRepair(data, refNum) {
 		$("#datePickedUpContext").hide();
 	}
 	$("#GSXRepairIDTextArea").val("");
-	if (repair["gsxid"]) {
-		$("#GSXRepairID").show();
-		$("#GSXRepairID").text(repair["gsxid"]);
-		$("#GSXRepairID").attr("data-text", repair["gsxid"]);
-		$("#addGSXRepairIDButton").hide();
-		$("#GSXRepairIDInputGroup").hide();
+	if (repair["make"] == "Apple") {
+		$(".GSXRepairIDCol").show();
+		if (repair["gsxid"]) {
+			$("#GSXRepairID").show();
+			$("#GSXRepairID").text(repair["gsxid"]);
+			$("#GSXRepairID").attr("data-text", repair["gsxid"]);
+			$("#addGSXRepairIDButton").hide();
+			$("#GSXRepairIDInputGroup").hide();
+		}
+		else {
+			$("#addGSXRepairIDButton").show();
+			$("#GSXRepairID").hide();
+			$("#GSXRepairIDInputGroup").hide();
+		}
 	}
 	else {
-		$("#addGSXRepairIDButton").show();
-		$("#GSXRepairID").hide();
-		$("#GSXRepairIDInputGroup").hide();
+		$(".GSXRepairIDCol").hide();
 	}
 	if (repair["address"]) {
 		$("#addressRepairRow").show();
