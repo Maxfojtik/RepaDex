@@ -75,10 +75,11 @@ function generateReport() {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(18);
     doc.text("Repairs Report", 105, 45, null, null, "center");
-
     startDate = new Date($("#reportStart").val());
     endDate = new Date($("#reportEnd").val());
     if (startDate && endDate) {
+        doc.setFontSize(12);
+        doc.text(startDate.toDateString() + " - " + endDate.toDateString(), doc.internal.pageSize.width / 2, 53, { "align": "center" });
         var repairs = [];
         for (var refNum in backendData["repairs"]) {
             // console.log(repairStartDate + "\t" + startDate + "\t" + endDate);
@@ -90,17 +91,17 @@ function generateReport() {
         var combos = getMakeModelCombos(repairs);
         //do all the data crunching
         var only = $("#generatorRepairsList").text() == "Only";
-        console.log(only);
+        // console.log(only);
         var customers = $("#repairReportGeneratorCustomers").val().split(",");
-        console.log(customers);
+        // console.log(customers);
         var data = calculateEverything(combos, repairs, only, customers);
         var largestAtTop = $("#generatorRepairsSortBy").val() == "large";
         var idToSortBy = $('#reportGeneratorSortBy input:radio:checked').val();
         var sortingCalculation = $("#" + idToSortBy).val();
         var sortedCombos = sortBy(combos, data, largestAtTop, sortingCalculation);
-        console.log(sortedCombos);
+        // console.log(sortedCombos);
         doc.setFontSize(12);
-        var pageY = 55;//start down
+        var pageY = 62;//start down
         var maxWidth = 25;
         var spacing = maxWidth + 2;
         var nameMax = 50;
@@ -133,12 +134,12 @@ function generateReport() {
                 labels.push(label);
             }
         }
-        console.log(labels);
+        // console.log(labels);
         generateFirstLine(doc, 12, pageY, labels, spacing, nameMax, maxWidth);
         for (var i = 0; i < sortedCombos.length; i++) {
             if (data[sortedCombos[i]]["quantity"] > 0) {//ignore 0 qty things
                 pageY += 8;//move down
-                if (pageY > doc.internal.pageSize.height)//if we are greater than the height of the page
+                if (pageY > doc.internal.pageSize.height - 2)//if we are greater than the height of the page plus a margin
                 {
                     doc.addPage();
                     pageY = 10;//start at top
@@ -146,6 +147,16 @@ function generateReport() {
                 generateLine(doc, data[sortedCombos[i]], labels, spacing, nameMax, maxWidth, 12, pageY, 10, i);
             }
         }
+        pageY += 16;//move down 2 lines
+        if (pageY > doc.internal.pageSize.height - 2)//if we are greater than the height of the page plus a margin
+        {
+            doc.addPage();
+            pageY = 10;//last line at top
+        }
+        else {
+            pageY = doc.internal.pageSize.height - 10//last line at bottom
+        }
+        generateLastLine(doc, pageY, startDate, endDate);
         doc.save("report.pdf");
     }
 
@@ -217,6 +228,14 @@ function generateSingleCol(doc, textIn, x, y, maxWidth) {
         doc.text(x, y, text + "...");
     }
 }
+
+function generateLastLine(doc, y, startDate, endDate) {
+    doc.setFillColor("#000");
+    // console.log(y);
+    doc.rect(5, y, doc.internal.pageSize.width - 5 * 2, .5, "F");
+    doc.text(startDate.toDateString() + " - " + endDate.toDateString() + ", generated on " + (new Date().toDateString()), doc.internal.pageSize.width / 2, y + 5, { "align": "center" });
+}
+
 function generateFirstLine(doc, x, y, labels, spacing, nameMax, maxWidth) {
     var widthOfPage = doc.internal.pageSize.width;
     generateSingleCol(doc, "Device", x, y, nameMax);
@@ -299,11 +318,11 @@ function validCustomer(email, only, customers) {
     for (var i in customers) {
         var customer = customers[i].toLowerCase().trim();
         if (nameNumber == customer && only) {//if they are and only
-            console.log("only");
+            // console.log("only");
             return true;
         }
         if (nameNumber == customer && !only) {//if they are and excluded, then no
-            console.log("exclude");
+            // console.log("exclude");
             return false;
         }
     }

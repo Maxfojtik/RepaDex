@@ -197,7 +197,10 @@ ChangeLog:
 	made loaner date received work because it didnt....
 	added ability to click on old ref numbers in the history of a loaner
 	fixed repadex not noticing when the k drive comes online.
-1.2:
+1.1.2:
 	fixed bug where it closes by it self after 1 minute
 	added the ability to generate reports
 	make the DEP serial requirement just blue instead of a link because "links take you places"
+1.1.2a:
+	added the ability to put gsx repair ID into repair
+	added date generated and date range to reports

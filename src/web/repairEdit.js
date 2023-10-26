@@ -119,6 +119,11 @@ $(document).on("keyup", '#noteTextInput', function (e) {
 		saveWork();
 	}
 });
+$(document).on("keyup", '#GSXRepairIDTextArea', function (e) {
+	if (e.keyCode == 13 && !$("#GSXRepairIDSave").is(":disabled")) {
+		saveGSXID();
+	}
+});
 $(document).ready(function () {
 	$('#loginToast').on('hidden.bs.toast', function () {
 		if (loginToast) {
@@ -341,6 +346,7 @@ function selectLoginPill(name) {
 	$("#loggedInAsLabel").text("Logged in as: " + name);
 	$("#issueLoanerButton").prop('disabled', false);
 	$("#checkInLoanerButton").prop('disabled', false);
+	$("#addGSXRepairIDButton").prop('disabled', false);
 	loginToast.hide();
 }
 function showLoginToast() {
@@ -355,6 +361,25 @@ function addWorkLogin() {
 		addWork();
 	}
 }
+
+function saveGSXID() {
+	var gsxid = $("#GSXRepairIDTextArea").val().trim();
+	if (gsxid != "") {
+		var logEntry = {};
+		logEntry["who"] = loggedInAs;
+		logEntry["when"] = new Date().toJSON();
+		logEntry["what"] = "Added a GSX id: " + gsxid;
+		currentRepairJSON["logs"].push(logEntry);
+		addedWorkRefNum = currentRepairJSON["refNum"];
+		currentRepairJSON["gsxid"] = gsxid;
+		window.api.send("toMain", "s" + JSON.stringify(currentRepairJSON));
+		freezeForm();
+		$("#GSXRepairIDTextArea").prop("disabled", true);
+		$("#GSXRepairIDSave").prop("disabled", true);
+		startLoadingSaving("Adding GSX id to repair...");
+	}
+}
+
 function editRepairPencil() {
 	$("#customerNameEditForm").val(currentRepairJSON["name"]);
 	$("#emailEditForm").val(currentRepairJSON["email"]);
@@ -368,6 +393,7 @@ function editRepairPencil() {
 	$("#notesEditForm").val(currentRepairJSON["intakeNotes"]);
 	$("#iPadSerialEditForm").val(currentRepairJSON["iPadSN"]);
 	$("#purchaseDateEditForm").val(currentRepairJSON["purchaseDate"]);
+	$("#GSXRepairIDEditForm").val(currentRepairJSON["gsxid"]);
 	if (currentRepairJSON["address"]) {
 		$("#address1EditForm").val(currentRepairJSON["address"]["address1"]);
 		$("#address2EditForm").val(currentRepairJSON["address"]["address2"]);
@@ -409,6 +435,12 @@ function saveEditRepair() {
 		buildingLog += " email: '" + currentRepairJSON["email"] + "' -> '" + newEmail + "'";
 	}
 	currentRepairJSON["email"] = newEmail;
+
+	var newGSX = $("#GSXRepairIDEditForm").val();
+	if (newGSX != currentRepairJSON["gsxid"]) {
+		buildingLog += " GSX ID: '" + currentRepairJSON["gsxid"] + "' -> '" + newGSX + "'";
+	}
+	currentRepairJSON["gsxid"] = newGSX;
 
 	var newPhone = $("#phoneEditForm").val();
 	if (newPhone != currentRepairJSON["phone"]) {
@@ -565,7 +597,19 @@ function showRepair(data, refNum) {
 		$("#datePickedUpButton").show();
 		$("#datePickedUpContext").hide();
 	}
-
+	$("#GSXRepairIDTextArea").val("");
+	if (repair["gsxid"]) {
+		$("#GSXRepairID").show();
+		$("#GSXRepairID").text(repair["gsxid"]);
+		$("#GSXRepairID").attr("data-text", repair["gsxid"]);
+		$("#addGSXRepairIDButton").hide();
+		$("#GSXRepairIDInputGroup").hide();
+	}
+	else {
+		$("#addGSXRepairIDButton").show();
+		$("#GSXRepairID").hide();
+		$("#GSXRepairIDInputGroup").hide();
+	}
 	if (repair["address"]) {
 		$("#addressRepairRow").show();
 		$("#addressLabel").attr("data-text", repair["address"]["address1"].trim() + (repair["address"]["address2"] ? (" " + repair["address"]["address2"]) : "") + ", " + repair["address"]["city"] + ", " + repair["address"]["state"] + " " + repair["address"]["zip"]);
@@ -679,6 +723,15 @@ function showRepair(data, refNum) {
 		$("#workTableBody").append(toAppend);
 	}
 }
+
+function addGSXRepairID() {
+	$("#addGSXRepairIDButton").hide();
+	$("#GSXRepairIDInputGroup").show();
+	$("#GSXRepairIDTextArea").focus();
+	$("#GSXRepairIDTextArea").prop("disabled", false);
+	$("#GSXRepairIDSave").prop("disabled", false);
+}
+
 function showLogs() {
 	var allLogs = currentRepairJSON["logs"];
 	if (!allLogs) {

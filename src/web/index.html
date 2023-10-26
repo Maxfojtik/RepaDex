@@ -334,6 +334,28 @@
 							<h5 class="d-inline-flex header-inline copiable" id="iPadSNLabel" data-text=""></h5>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">Cost</h5>
+						</div>
+						<div class="col-4">
+
+						</div>
+						<div class="col-2">
+							<h5 class="d-inline-flex header-inline text-muted">GSX Repair ID</h5>
+						</div>
+						<div class="col-4" style="height: 0px;">
+							<button id="addGSXRepairIDButton" type="button" class="btn btn-primary repairEditButton"
+								onclick="addGSXRepairID()" disabled>
+								Add Repair ID</button>
+							<div class="input-group" id="GSXRepairIDInputGroup" style="display:none; width:200px">
+								<input type="text" class="form-control form-control-sm" id="GSXRepairIDTextArea">
+								<button class="btn btn-outline-primary repairEditButton" type="button"
+									id="GSXRepairIDSave" onclick="saveGSXID()">Save</button>
+							</div>
+							<h5 class="header-inline copiable" id="GSXRepairID" data-text="" style="display:none;"></h5>
+						</div>
+					</div>
 					<div class="row" id="addressRepairRow">
 						<div class="col-2">
 							<h5 class="d-inline-flex header-inline text-muted copiable" id="addressLabel">Address</h5>
@@ -1150,6 +1172,10 @@
 							<div class="input-group mb-3 col">
 								<span class="input-group-text const-width-1">iPad SN</span>
 								<input id="iPadSerialEditForm" type="text" class="form-control" placeholder="">
+							</div>
+							<div class="input-group mb-3 col">
+								<span class="input-group-text const-width-1">GSX ID</span>
+								<input id="GSXRepairIDEditForm" type="text" class="form-control" placeholder="">
 							</div>
 						</div>
 						<div class="row">
