@@ -807,11 +807,25 @@ function clearLoaner() {
 
 function addLoaner() {
 	$('#addLoanerModal').modal('show');
+	$("#loanerAddSerialNumber").val("");
+	$("#loanerAddMake").val("");
+	$("#loanerAddModel").val("");
+	$("#loanerAddAccessories").val("");
 	$('#loanerErrorModal').modal('hide');
 	$("#addLoanerCheck").hide();
 	$("#addLoanerInputs").show();
+	addingLoanerThroughSettings = 0;
 }
 
+function checkIfLoanerExists() {
+	var assetTag = $("#loanerAddAssetTag").val();
+	if (assetTag in backendData["loaners"]) {
+		$("#loanerAddSerialNumber").val(backendData["loaners"][assetTag]["serial"]);
+		$("#loanerAddMake").val(backendData["loaners"][assetTag]["make"]);
+		$("#loanerAddModel").val(backendData["loaners"][assetTag]["model"]);
+		$("#loanerAddAccessories").val(backendData["loaners"][assetTag]["acc"]);
+	}
+}
 
 var tryingToStartALoanerForm = false;
 var assetNumber;
@@ -820,7 +834,15 @@ var assetNumber;
 window.api.receive("fromMainLoanerSaved", (data) => {
 	doneLoadingSaving();
 	backendData = JSON.parse(data);
-	if (tryingToStartALoanerForm) {
+	if (addingLoanerThroughSettings > 0) {
+		unfreezeForm();
+		console.log("saved loaner through settings");
+		$('#addLoanerModal').modal('hide');
+		addingLoanerThroughSettings = 2;
+		startLoadingSaving("Loading updated database...");
+		window.api.send("toMain", "loadAll");
+	}
+	else if (tryingToStartALoanerForm) {
 		unfreezeForm();
 		tryingToStartALoanerForm = false;
 		console.log("saved loaner");
@@ -864,12 +886,17 @@ window.api.receive("fromMainLoanerSaved", (data) => {
 
 function saveNewLoaner() {
 	currentLoanerJSON = {};
-	currentLoanerJSON["number"] = $("#assetTagForm").val();
+	currentLoanerJSON["number"] = $("#loanerAddAssetTag").val();
 	currentLoanerJSON["serial"] = $("#loanerAddSerialNumber").val();
 	currentLoanerJSON["make"] = $("#loanerAddMake").val();
 	currentLoanerJSON["model"] = $("#loanerAddModel").val();
 	currentLoanerJSON["acc"] = $("#loanerAddAccessories").val();
-	tryingToStartALoanerForm = true;
+	if (addingLoanerThroughSettings > 0) {
+		tryingToStartALoanerForm = false;
+	}
+	else {
+		tryingToStartALoanerForm = true;
+	}
 	freezeForm();
 	startLoadingSaving("Saving Loaner Information...");
 	window.api.send("toMain", "z" + JSON.stringify(currentLoanerJSON));
@@ -891,13 +918,14 @@ function findAndFillLoanerForm(assetTag) {
 		var errorText = "<p>Asset Tag was not found.</p>";
 		errorText += "<button class=\"btn btn-primary\" type=\"button\" aria-label=\"Add it\" onclick=\"addLoaner()\">Add it</button>";
 		$("#loanerAddAssetTag").val(assetTag);//we can fill this beforehand because they wont see it if they cancel
+		$("#loanerAddAssetTag").prop("disabled", true);
 		$("#loanerErrorModelBody").html(errorText);
 		$('#loanerErrorModal').modal('show');
 	}
 }
 
 function validateloanerDoneButton() {
-	var doneEnabled = $("#loanerAddSerialNumber").val() != "" && $("#loanerAddMake").val() != "" && $("#loanerAddModel").val() != "";
+	var doneEnabled = $("#loanerAddAssetTag").val() != "" && $("#loanerAddSerialNumber").val() != "" && $("#loanerAddMake").val() != "" && $("#loanerAddModel").val() != "";
 	$("#loanerAddDoneButton").prop("disabled", !doneEnabled);
 }
 

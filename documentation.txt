@@ -206,3 +206,6 @@ ChangeLog:
 	added date generated and date range to reports
 1.1.2b:
 	added a link to the GSX repair ID to open that GSX page
+1.1.2c:
+	made it so you can add loaners from the settings screen
+	also made it so you can edit loaners as well

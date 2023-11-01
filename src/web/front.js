@@ -67,6 +67,10 @@ window.api.receive("fromMainLoadAll", (data) => {
 			window.api.send("toMain", "s"+JSON.stringify(backendData["repairs"][refNum]));
 		}*/
 		if (backendData["repairs"]) {
+			if (addingLoanerThroughSettings > 1) {
+				setupSettingsLoaners();
+				addingLoanerThroughSettings = 0;
+			}
 			if ($("#searchInput").val().toLowerCase().length > 0) {
 				search(false);
 			}

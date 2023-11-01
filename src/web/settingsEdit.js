@@ -33,6 +33,15 @@ function addNewUser() {
     modal.show();
 }
 
+var addingLoanerThroughSettings = 0;
+
+function addNewLoaner() {
+    addLoaner();
+    $("#loanerAddAssetTag").val("");
+    $("#loanerAddAssetTag").prop("disabled", false);
+    addingLoanerThroughSettings = 1;
+}
+
 function saveNewUser() {
     addingANewEmployee = true;
     var modal = bootstrap.Modal.getOrCreateInstance('#addUserModal');
