@@ -209,3 +209,7 @@ ChangeLog:
 1.1.2c:
 	made it so you can add loaners from the settings screen
 	also made it so you can edit loaners as well
+1.1.2d:
+	fixed bug where the iPadSN is not hidden when we reset the reapriForm
+	added popovers for loaner history if long.
+	make the settings gear disable until we are done loading

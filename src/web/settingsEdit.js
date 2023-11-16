@@ -53,6 +53,11 @@ function clickRefNum(refNum) {
     refClicked = refNum;
     clickRow(refNum);
 }
+
+function getPopoverHTML(text) {
+    return "data-bs-toggle=\"popover\" data-bs-trigger=\"hover\" data-bs-content=\"" + text + "\"";
+}
+
 function setupSettingsLoaners() {
     $("#accordionLoaners").empty();
     for (var tag in backendData["loaners"]) {
@@ -81,12 +86,28 @@ function setupSettingsLoaners() {
                 var dateRelText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
                 date = new Date(historyEntry["dateReceived"]);
                 var dateReceText = String(date.getMonth() + 1).padStart(2, '0') + "/" + String(date.getDate()).padStart(2, '0') + "/" + date.getFullYear();
+
+
+                var conditionReleasedText = historyEntry["conditionReleased"];
+                var releasePopoverHTML = "";
+                var conditionReceivedText = historyEntry["conditionReceived"];
+                var recePopoverHTML = "";
+                var maxSize = 15;
+                if (conditionReleasedText.length > maxSize) {
+                    releasePopoverHTML = getPopoverHTML(conditionReleasedText);
+                    conditionReleasedText = conditionReleasedText.substring(0, maxSize) + "...";
+                }
+                if (conditionReceivedText.length > maxSize) {
+                    recePopoverHTML = getPopoverHTML(conditionReceivedText);
+                    conditionReceivedText = conditionReceivedText.substring(0, maxSize) + "...";
+                }
+
                 innerAccord += "<div class=\"settings-history-who-started\">" + getPill(config.employees[historyEntry["whoStarted"]]["name"], historyEntry["whoStarted"], "", "") + "</div>";
                 innerAccord += "<div class=\"settings-history-ref\"><a href='javascript:void(0)' onclick='clickRefNum(" + historyEntry["refNum"] + ")'>" + historyEntry["refNum"] + "</a></div>";
                 innerAccord += "<div class=\"settings-history-value-released\">" + historyEntry["valueReleased"] + "</div>";
                 innerAccord += "<div class=\"settings-history-valueReceived\">" + historyEntry["valueReceived"] + "</div>";
-                innerAccord += "<div class=\"settings-history-conditionReleased\">" + historyEntry["conditionReleased"] + "</div>";
-                innerAccord += "<div class=\"settings-history-conditionReceived\">" + historyEntry["conditionReceived"] + "</div>";
+                innerAccord += "<div class=\"settings-history-conditionReleased " + (releasePopoverHTML != "" ? "has-loaner-popover" : "") + "\" " + releasePopoverHTML + "\">" + conditionReleasedText + "</div>";
+                innerAccord += "<div class=\"settings-history-conditionReceived " + (recePopoverHTML != "" ? "has-loaner-popover" : "") + "\" " + recePopoverHTML + "\">" + conditionReceivedText + "</div>";
                 innerAccord += "<div class=\"settings-history-dateReleased\">" + dateRelText + "</div>";
                 innerAccord += "<div class=\"settings-history-dateReceived\">" + dateReceText + "</div>";
                 accordionBodyText += "<li class=\"list-group-item settings-loaner-line\">" + innerAccord + "</li>";
@@ -108,6 +129,9 @@ function setupSettingsLoaners() {
         var accordionItemEnd = "</div>";
         var accordionHTML = accordionItem + header + accordionButton + headerEnd + accordionInside + accordionBody + accordionBodyText + accordionBodyEnd + accordionInsideEnd + accordionItemEnd;
         $("#accordionLoaners").append(accordionHTML);
+        for (el of $(".has-loaner-popover")) {
+            new bootstrap.Popover(el);
+        }
 
     }
 }

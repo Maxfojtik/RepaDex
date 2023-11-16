@@ -1,7 +1,7 @@
 var blockProgress = false;
 var stopShaking = false;
 var building = "";
-var version = "1.1.2c";
+var version = "1.1.2d";
 var newVersion = "";
 var shownPanel = 0;//0 = main table, 1 = repairEdit, 2 = repairForm, 3 = loanerForm, 4 = repair warning, 5 = updating, -1 = settings
 var darkMode = true;
@@ -145,12 +145,14 @@ function startLoadingSaving(message) {
 	$(".starImage").css("visibility", "shown");
 	$("#pokeStars").hide();
 	$("#savingDisplay").removeClass("versionClickable");
+	$(".settings-gear").prop("disabled", true);
 	stopShaking = false;
 	blockProgress = true;
 }
 function doneLoadingSaving() {
 	$("#savingDisplay").css("color", "#ddd");
 	$("#waitReason").text("");
+	$(".settings-gear").prop("disabled", false);
 	//$("#saveSpinner").css("visibility", "hidden");
 	blockProgress = false;
 	stopShaking = true;

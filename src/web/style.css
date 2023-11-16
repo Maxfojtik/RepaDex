@@ -908,12 +908,14 @@ body {
 	position: absolute;
 	left: 400px;
 	top: 8px;
+	width: 150px;
 }
 
 .settings-history-conditionReceived {
 	position: absolute;
 	left: 575px;
 	top: 8px;
+	width: 150px;
 }
 
 .settings-history-dateReleased {

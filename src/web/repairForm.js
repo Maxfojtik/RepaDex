@@ -172,6 +172,9 @@ function resetRepairForm() {
 	$("#phoneForm").addClass("is-invalid");
 	$("#workerSelector").focus();
 	$(".saveButton").prop('disabled', true);
+	neediPadSN = false;
+	$("#iPadSNDiv").hide();
+	$("#passwordDiv").show();
 }
 function warrantySelected() {
 	if ($("#warrantySelector").val() == "Other") {
