@@ -80,7 +80,7 @@ function lockFile() {
 						sendBack("fromMainWaiting", txt);
 						console.log("waiting on lock");
 						goodToSave = false;
-						setTimeout(lockFile, 2000);
+						setTimeout(lockFile, 1000);
 						return;
 					}
 					else {
@@ -133,6 +133,7 @@ function makeDescriptors(repair) {
 	var descriptors = [];
 	if (repair["phone"]) {
 		descriptors.push(repair["phone"].toLowerCase());
+		descriptors.push(repair["phone"].replace("(", "").replace(")", "").replace("-", "").replace(" ", "").toLowerCase());//remove all the phone number stuff
 	}
 	descriptors.push(repair["email"].toLowerCase());
 	descriptors.push(repair["serial"].toLowerCase());
@@ -143,8 +144,46 @@ function makeDescriptors(repair) {
 	if (repair["iPadSN"]) {
 		descriptors.push(repair["iPadSN"].toLowerCase());
 	}
+	if (repair["gsxid"]) {
+		descriptors.push(repair["gsxid"].toLowerCase());
+	}
 	return descriptors;
 }
+
+function regenerateDescriptorsPart() {
+	if (goodToSave) {
+		clearInterval(savingTimer);
+		try {
+			var txt = fs.readFileSync(backendPath, 'utf8');
+			var jsonData = JSON.parse(txt);
+			for (var refNum in jsonData["repairs"]) {
+				var repair = jsonData["repairs"][refNum];
+				if (repair) {
+					repair["descriptors"] = makeDescriptors(repair);//just easier to do it "backend"
+				}
+				jsonData["repairs"][repair["refNum"]] = repair;
+				console.log(repair["refNum"] + " updated.");
+			}
+			var stringified = JSON.stringify(jsonData);
+			fs.writeFileSync(backendPath, stringified);
+			doneSaving = true;
+			console.log("done.");
+			sendBack("fromMainSaveSuc", stringified);
+		}
+		catch (err) {
+			//savingTimer = setInterval(saveRepairPart, 2000);
+			console.log(err);
+			doneSaving = true;
+			if (isALoaner) {
+				sendBack("fromMainLoanerSaveFail", "");
+			}
+			else {
+				sendBack("fromMainSaveFail", "");
+			}
+		}
+	}
+}
+
 function saveRepairPart() {
 	//console.log("check");
 	if (goodToSave) {
@@ -189,6 +228,13 @@ function saveRepairPart() {
 			}
 		}
 	}
+}
+function regenerateDescriptors() {
+	console.log("regenerating descriptors");
+	saving = true;
+	doneSaving = false;
+	isALoaner = false;
+	savingTimer = setInterval(regenerateDescriptorsPart, 1000);
 }
 function saveRepair(inJSON) {
 	console.log("saving repair");
@@ -358,6 +404,9 @@ ipcMain.on("toMain", (event, args) => {
 		if (args == "configPls") {
 			var txt = fs.readFileSync(configPathLocal, 'utf8');
 			sendBack("fromMainConfig", txt);
+		}
+		else if (args == "regenerateDescriptors") {
+			regenerateDescriptors();
 		}
 		else if (args == "loadAll") {
 			loadMessageName = "fromMainLoadAll";

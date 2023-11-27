@@ -1,7 +1,7 @@
 var blockProgress = false;
 var stopShaking = false;
 var building = "";
-var version = "1.1.2d";
+var version = "1.1.2e";
 var newVersion = "";
 var shownPanel = 0;//0 = main table, 1 = repairEdit, 2 = repairForm, 3 = loanerForm, 4 = repair warning, 5 = updating, -1 = settings
 var darkMode = true;
@@ -131,6 +131,11 @@ window.api.receive("fromMainRemoteVersion", (data) => {
 		$("#versionLabel").addClass("text-muted");
 	}
 });
+function regenerateDescriptors() {
+	freezeFront = true;
+	startLoadingSaving("Regenerating Descriptors...");
+	window.api.send("toMain", "regenerateDescriptors");
+}
 var numberWaits;
 function startLoadingSaving(message) {
 	numberWaits = 0;

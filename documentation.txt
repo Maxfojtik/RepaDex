@@ -213,3 +213,7 @@ ChangeLog:
 	fixed bug where the iPadSN is not hidden when we reset the reapriForm
 	added popovers for loaner history if long.
 	make the settings gear disable until we are done loading
+1.1.2e:
+	QOL: make it so you can search for GSX id
+	also make it easier to search for phone numbers
+	make it so you can regenerate descriptors from settings panel
