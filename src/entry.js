@@ -325,7 +325,6 @@ function cancelError() {
 		errorWin.close();
 	}
 }
-var cancelTimer = false;
 function copyConfigAndStart() {
 	if (!win) {
 		createWindow();//create the window
