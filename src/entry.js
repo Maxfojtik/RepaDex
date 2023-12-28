@@ -333,9 +333,10 @@ function copyConfigAndStart() {
 	fs.copyFile(configPath, configPathLocal, (err) => {
 		if (err) {
 			displayError(err + " : " + (Date.now()));
+			setTimeout(copyConfigAndStart, 1000);//try again in 1 second
 			return;
 		}//throw err};
-		cancelError();
+		// cancelError();
 		var txt = fs.readFileSync(configPathLocal, 'utf8');
 		backendPath = JSON.parse(txt).backendPath;
 		lockedPath = JSON.parse(txt).lockFilePath;

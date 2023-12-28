@@ -217,3 +217,5 @@ ChangeLog:
 	QOL: make it so you can search for GSX id
 	also make it easier to search for phone numbers
 	make it so you can regenerate descriptors from settings panel
+1.1.2f:
+	make it so it tries again if failed to load
