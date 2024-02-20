@@ -219,3 +219,5 @@ ChangeLog:
 	make it so you can regenerate descriptors from settings panel
 1.1.2f:
 	make it so it tries again if failed to load
+1.1.2g:
+	make it so when you change the color it says you have unsaved changes

@@ -10,7 +10,7 @@ function openSettings() {
 
 function applyPillColor(employee) {
     var color = document.getElementById("settings-employee-" + employee + "-color").value;
-    console.log(color);
+    // console.log(color);
     // console.log($("#settings-pill-" + employee));
     $("#settings-pill-" + employee).css("background-color", color);
     $("#settings-pill-" + employee).css("border-color", color);
@@ -176,6 +176,7 @@ function determineIfUsersChanged() {
         changed = changed || (employeeConfig["repairTeam"] ? true : false) != $("#settings-employee-" + smallEm + "-check-repair").is(":checked");
         changed = changed || (employeeConfig["active"] ? true : false) != $("#settings-employee-" + smallEm + "-check-active").is(":checked");
         changed = changed || (employeeConfig["black-text"] ? true : false) != $("#settings-employee-" + smallEm + "-check-black").is(":checked");
+        changed = changed || employeeConfig["color"] != document.getElementById("settings-employee-" + smallEm + "-color").value;
     }
     if (changed) {
         addingANewEmployee = false;
