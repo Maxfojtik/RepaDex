@@ -365,7 +365,7 @@ function peopleCallback(jsonIn)
 	validateInputElement($("#nameForm")[0]);
 	validateEmail();
 	// console.log(jsonIn);
-	doneLoadingSaving();
+	// doneLoadingSaving();
 }
 function findPerson() {
 	// var osuFindPeopleURL = "https://www.osu.edu/findpeople/";
@@ -380,7 +380,7 @@ function findPerson() {
 	var toSendObj = ["search",{"term":searchingNameN,"providers":["majors","people","buildings"]}];
 	searchPeopleWithWebsockets("wss://search-api.intcomm.osu.edu/socket.io/?EIO=3&transport=websocket", 42+JSON.stringify(toSendObj), peopleCallback);
 	// window.api.send("toMain", "loadForSearch");
-	startLoadingSaving("Searching OSU...");
+	// startLoadingSaving("Searching OSU...");
 	// $.get("https://www.osu.edu/search/?view=people&query=fojtik.6", function (data, status) {
 	// 	console.log("Data: " + data + "\nStatus: " + status);
 	// });
