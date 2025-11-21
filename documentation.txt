@@ -221,3 +221,5 @@ ChangeLog:
 	make it so it tries again if failed to load
 1.1.2g:
 	make it so when you change the color it says you have unsaved changes
+1.1.3:
+	added back searching for students!

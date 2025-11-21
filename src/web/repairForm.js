@@ -328,6 +328,45 @@ window.api.receive("fromMainLoadSearch", (data) => {
 	validateInputElement($("#phoneForm")[0]);
 	doneLoadingSaving();
 });
+function searchPeopleWithWebsockets(url, message, callback) {
+    const ws = new WebSocket(url);
+    
+    ws.onopen = () => {
+        ws.send(typeof message === 'object' ? JSON.stringify(message) : message);
+    };
+    
+    ws.onmessage = (event) => {
+        if (event.data.startsWith('42')) {
+            try {
+                const json = JSON.parse(event.data.substring(2));
+				// console.log(json);
+				if(json[1].meta.provider=="people")
+				{
+					ws.close();
+					callback(json);
+				}
+            } catch (e) {
+                console.error('Parse error:', e);
+            }
+        }
+    };
+}
+function peopleCallback(jsonIn)
+{
+	var found = jsonIn[1].meta.total > 0;
+	if(found)
+	{
+		var title = jsonIn[1].data[0].attributes.title;
+		// var lastName = jsonIn[1].data[0].attributes.last_name;
+		var email = jsonIn[1].data[0].attributes.email;
+		$("#emailForm").val(email);
+		$("#nameForm").val(title);
+	}
+	validateInputElement($("#nameForm")[0]);
+	validateEmail();
+	// console.log(jsonIn);
+	doneLoadingSaving();
+}
 function findPerson() {
 	// var osuFindPeopleURL = "https://www.osu.edu/findpeople/";
 	$("#nameForm").removeClass("is-valid");
@@ -338,8 +377,10 @@ function findPerson() {
 	$("#phoneForm").removeClass("is-invalid");
 
 	searchingNameN = $("#emailForm").val().toLowerCase().replace("@osu.edu", "");
-	window.api.send("toMain", "loadForSearch");
-	startLoadingSaving("Searching...");
+	var toSendObj = ["search",{"term":searchingNameN,"providers":["majors","people","buildings"]}];
+	searchPeopleWithWebsockets("wss://search-api.intcomm.osu.edu/socket.io/?EIO=3&transport=websocket", 42+JSON.stringify(toSendObj), peopleCallback);
+	// window.api.send("toMain", "loadForSearch");
+	startLoadingSaving("Searching OSU...");
 	// $.get("https://www.osu.edu/search/?view=people&query=fojtik.6", function (data, status) {
 	// 	console.log("Data: " + data + "\nStatus: " + status);
 	// });
