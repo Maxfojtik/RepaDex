@@ -328,7 +328,6 @@ window.api.receive("fromMainLoadSearch", (data) => {
 	}
 	else
 	{
-		searchingNameN = $("#emailForm").val().toLowerCase().replace("@osu.edu", "");
 		var toSendObj = ["search",{"term":searchingNameN,"providers":["majors","people","buildings"]}];
 		searchPeopleWithWebsockets("wss://search-api.intcomm.osu.edu/socket.io/?EIO=3&transport=websocket", 42+JSON.stringify(toSendObj), peopleCallback);
 	}
@@ -382,6 +381,8 @@ function findPerson() {
 	$("#phoneForm").removeClass("is-valid");
 	$("#phoneForm").removeClass("is-invalid");
 
+
+	searchingNameN = $("#emailForm").val().toLowerCase().replace("@osu.edu", "");
 	window.api.send("toMain", "loadForSearch");
 	startLoadingSaving("Searching Previous Repairs...");
 	// $.get("https://www.osu.edu/search/?view=people&query=fojtik.6", function (data, status) {
