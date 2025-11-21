@@ -369,6 +369,7 @@ function peopleCallback(jsonIn)
 	}
 	validateInputElement($("#nameForm")[0]);
 	validateEmail();
+	validateInputElement($("#phoneForm")[0]);
 	// console.log(jsonIn);
 	// doneLoadingSaving();
 }
@@ -381,10 +382,18 @@ function findPerson() {
 	$("#phoneForm").removeClass("is-valid");
 	$("#phoneForm").removeClass("is-invalid");
 
-
 	searchingNameN = $("#emailForm").val().toLowerCase().replace("@osu.edu", "");
-	window.api.send("toMain", "loadForSearch");
-	startLoadingSaving("Searching Previous Repairs...");
+	if(searchingNameN.length > 0)
+	{
+		window.api.send("toMain", "loadForSearch");
+		startLoadingSaving("Searching Previous Repairs...");
+	}
+	else
+	{
+		validateInputElement($("#nameForm")[0]);
+		validateEmail();
+		validateInputElement($("#phoneForm")[0]);
+	}
 	// $.get("https://www.osu.edu/search/?view=people&query=fojtik.6", function (data, status) {
 	// 	console.log("Data: " + data + "\nStatus: " + status);
 	// });
