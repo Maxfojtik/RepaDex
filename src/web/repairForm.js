@@ -383,7 +383,7 @@ function findPerson() {
 	$("#phoneForm").removeClass("is-invalid");
 
 	window.api.send("toMain", "loadForSearch");
-	startLoadingSaving("Searching OSU...");
+	startLoadingSaving("Searching Previous Repairs...");
 	// $.get("https://www.osu.edu/search/?view=people&query=fojtik.6", function (data, status) {
 	// 	console.log("Data: " + data + "\nStatus: " + status);
 	// });
